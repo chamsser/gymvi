@@ -13,6 +13,9 @@ import io.github.chamsser.gymvi.recommendation.RecommendationItem
 import io.github.chamsser.gymvi.recommendation.RecommendationService
 import org.slf4j.LoggerFactory
 import tools.jackson.databind.ObjectMapper
+import java.time.Clock
+import java.time.LocalDate
+import java.time.ZoneId
 
 internal class AiTurnService(
     private val recommendationService: RecommendationService,
@@ -21,6 +24,8 @@ internal class AiTurnService(
     private val conversationStore: AiConversationStore,
     private val toolRequestParser: AiToolRequestParser,
     private val objectMapper: ObjectMapper,
+    private val facilityFallback: AiFacilityFallback? = null,
+    private val clock: Clock = Clock.systemUTC(),
 ) {
     private val log = LoggerFactory.getLogger(AiTurnService::class.java)
 
@@ -84,7 +89,10 @@ internal class AiTurnService(
                 val previousDataset = state.lastDataset
                 val previousComparedCards = state.lastComparedCards
                 val previousComparedDataset = state.lastComparedDataset
-                val baseQuery = state.context.copy(origin = transientOrigin)
+                val baseQuery = state.context.copy(
+                    origin = transientOrigin,
+                    date = state.context.date ?: LocalDate.now(clock.withZone(ZoneId.of("Asia/Seoul"))),
+                )
                 val request = AiModelRequest(
                     message = input.message,
                     recentTurns = state.recentTurns,
@@ -92,6 +100,7 @@ internal class AiTurnService(
                     lastOptions = state.lastCards.map(AiModelOption::from),
                     originAvailable = transientOrigin != null,
                     references = input.references,
+                    searchDate = baseQuery.date,
                 )
                 var searchExecution: AiToolExecution? = null
                 var comparisonExecution: AiToolExecution? = null
@@ -260,6 +269,7 @@ internal class AiTurnService(
                 dataset = result.facilityDataset,
                 kind = AiToolKind.SEARCH,
                 schedulePolicy = schedulePolicy,
+                programDataAvailable = result.data.programDatasetVersion != null,
             )
         } catch (exception: GymviApiException) {
             AiToolExecution(
@@ -490,7 +500,25 @@ internal class AiTurnService(
             !serverOnlyActionRejected && !priceUnitRejected
         val conversationalReply = model.conversationalReply && modelTextAllowed &&
             action == AiAction.ASK_CLARIFYING_QUESTION && searchExecution == null && comparisonExecution == null
-        val reply = when (action) {
+        val emptySearchReply = if (cards.isEmpty() && searchExecution != null && searchExecution.errorCode == null &&
+            action in setOf(AiAction.SHOW_OPTIONS, AiAction.ASK_CLARIFYING_QUESTION) && !priceUnitRejected &&
+            !selectionRejected && !comparisonRejected && !serverOnlyActionRejected
+        ) {
+            if (!searchExecution.programDataAvailable) {
+                "프로그램 자료를 지금 확인할 수 없어 조건에 맞는 결과인지 판단할 수 없어요. 지도 검색에서 시설을 찾아볼 수 있어요."
+            } else {
+                facilityFallback?.reply(state.context.area, searchExecution.conditions.categories?.values.orEmpty(), searchExecution.dataset, userMessage)
+                    ?: AiOptionExplanation.compose(emptyList(), "")
+            }
+        } else null
+        val reply = emptySearchReply ?: when (action) {
+            AiAction.SHOW_OPTIONS -> AiOptionExplanation.compose(
+                cards,
+                safeOptionIntroduction(if (modelTextAllowed) model.summary else "", factCards,
+                    "확인된 프로그램을 추천 순서대로 살펴볼게요."),
+                userMessage,
+                previousCards,
+            )
             AiAction.COMPARE_OPTIONS -> comparisonReply(
                 comparisonExecution?.comparison,
                 cards,
@@ -748,11 +776,8 @@ internal class AiTurnService(
         capabilityQuestion: Boolean = false,
         conversationalReply: Boolean = false,
     ): String = when (action) {
-        AiAction.SHOW_OPTIONS -> if (cards.isEmpty()) {
-            "조건에 맞는 프로그램을 찾지 못했어요. 조건을 바꿔 다시 찾아보세요."
-        } else {
-            safeOptionIntroduction(modelSummary, factCards, "조건에 맞는 프로그램 ${cards.size}개를 찾았어요.")
-        }
+        AiAction.SHOW_OPTIONS -> AiOptionExplanation.compose(cards,
+            safeOptionIntroduction(modelSummary, factCards, "확인된 프로그램을 추천 순서대로 살펴볼게요."))
         AiAction.COMPARE_OPTIONS -> "프로그램을 비교 화면에서 확인해 보세요."
         AiAction.EXERCISE_GUIDE -> safeExerciseGuideText(modelSummary, factCards, false)
         AiAction.SAFETY_GUIDANCE -> "건강과 안전에 관해 확인 가능한 범위만 안내해요."

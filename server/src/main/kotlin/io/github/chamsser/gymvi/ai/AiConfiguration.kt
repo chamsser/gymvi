@@ -1,5 +1,6 @@
 package io.github.chamsser.gymvi.ai
 
+import io.github.chamsser.gymvi.catalog.FacilityCatalog
 import io.github.chamsser.gymvi.discovery.ExerciseContentService
 import io.github.chamsser.gymvi.recommendation.RecommendationService
 import org.springframework.beans.factory.annotation.Value
@@ -74,6 +75,8 @@ internal class AiConfiguration {
         conversationStore: AiConversationStore,
         toolRequestParser: AiToolRequestParser,
         objectMapper: ObjectMapper,
+        facilityCatalog: FacilityCatalog,
+        clock: Clock,
     ): AiTurnService = AiTurnService(
         recommendationService,
         exerciseContentService,
@@ -81,5 +84,7 @@ internal class AiConfiguration {
         conversationStore,
         toolRequestParser,
         objectMapper,
+        AiFacilityFallback(facilityCatalog),
+        clock,
     )
 }

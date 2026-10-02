@@ -10,6 +10,7 @@ import io.github.chamsser.gymvi.recommendation.RecommendationItem
 import io.github.chamsser.gymvi.recommendation.RecommendationQuery
 import io.github.chamsser.gymvi.recommendation.Origin
 import java.time.Instant
+import java.time.LocalDate
 
 enum class AiAction {
     ASK_CLARIFYING_QUESTION,
@@ -123,6 +124,7 @@ internal data class AiModelRequest(
     val lastOptions: List<AiModelOption>,
     val originAvailable: Boolean,
     val references: AiReferences = AiReferences(),
+    val searchDate: LocalDate? = null,
 )
 
 internal data class AiModelResult(
@@ -153,6 +155,7 @@ internal data class AiToolExecution(
     val comparison: ComparisonData? = null,
     val optionIds: List<String> = emptyList(),
     val schedulePolicy: AiSchedulePolicy? = null,
+    val programDataAvailable: Boolean = true,
 )
 
 internal fun interface AiToolExecutor {

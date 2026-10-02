@@ -103,6 +103,7 @@ internal object AiRequestPrecheck {
 
     private fun allowsAnyCategory(compact: String): Boolean =
         OPEN_CATEGORY_TERMS.any(compact::contains) ||
+            FAMILY_ACTIVITY_PATTERN.containsMatchIn(compact) ||
             (compact.contains("실내") && compact.contains("운동"))
 
     private fun isSearchIntent(compact: String): Boolean = SEARCH_TERMS.any(compact::contains)
@@ -147,6 +148,7 @@ internal object AiRequestPrecheck {
         listOf("클라이밍"),
     )
     private val SEARCH_TERMS = listOf("찾", "추천", "보여", "골라", "어디", "할만한곳", "할만한데")
+    private val FAMILY_ACTIVITY_PATTERN = Regex("아이(?:랑|와|하고)|가족(?:이|과|끼리)|자녀(?:와|랑)")
     private val COMPARISON_TERMS = listOf("비교", "대결", "vs")
     private val COMPARISON_QUESTION_PATTERN = Regex("(?:중|뭐가|어느|어떤).{0,8}(?:낫|나을|좋|맞)")
     private val OPEN_CATEGORY_TERMS = listOf(
