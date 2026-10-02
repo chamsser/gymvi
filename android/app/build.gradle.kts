@@ -36,8 +36,8 @@ android {
         applicationId = "io.github.chamsser.gymvi"
         minSdk = 26
         targetSdk = 37
-        versionCode = 59
-        versionName = "0.3.29-dev"
+        versionCode = 60
+        versionName = "0.3.30-dev"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
