@@ -12,4 +12,14 @@
     <string name="onboarding_my_body">신체 정보와 AI 메모리를 켜면 더 알맞게 추천해요. 이 정보는 이 기기에만 저장돼요.</string>
     <string name="onboarding_location_title">위치 권한을 허용해 주세요</string>
     <string name="onboarding_location_body">가까운 시설을 찾고 거리를 보여 줄 때만 위치를 써요. 허용하지 않아도 지도 검색과 AI 대화는 쓸 수 있어요.</string>
+    <string name="onboarding_body_title">신체 정보를 입력하여 사용자 맞춤 서비스를 제공할 수 있어요.</string>
+    <string name="onboarding_body_body">이 설정은 설정에서 끌 수 있으며 공유되지 않아요.</string>
+    <string name="onboarding_body_start">작성하러 가기</string>
+    <string name="onboarding_body_measure_title">키와 몸무게를 입력해 주세요.</string>
+    <string name="onboarding_body_age_title">연령대가 어떻게 되세요?</string>
+    <string name="onboarding_body_experience_title">운동 경험을 선택해 주세요.</string>
+    <string name="onboarding_body_goal_title">운동 목표를 선택해 주세요.</string>
+    <string name="onboarding_body_optional">모든 항목은 선택이에요. 비워 두고 넘어가도 돼요.</string>
+    <string name="onboarding_body_step">%1$d/%2$d</string>
+    <string name="onboarding_done">완료</string>
 </resources>

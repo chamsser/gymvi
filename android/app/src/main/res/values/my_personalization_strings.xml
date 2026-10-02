@@ -19,7 +19,7 @@
     <string name="my_profile_choose">선택하기</string>
     <string name="my_profile_unset">선택 안 함</string>
     <string name="my_profile_erase">입력 지우기</string>
-    <string name="my_profile_note">모든 항목은 선택입니다. 이 기기에만 저장하며 키와 몸무게는 기기 밖으로 보내지 않습니다.</string>
+    <string name="my_profile_note">신체 정보는 공유되지 않습니다.</string>
     <string name="my_profile_age">연령대</string>
     <string name="my_profile_age_youth">청소년</string>
     <string name="my_profile_age_adult">성인</string>

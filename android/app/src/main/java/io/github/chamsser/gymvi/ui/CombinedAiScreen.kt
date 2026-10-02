@@ -125,7 +125,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalTime
 
 /**
- * The combined design's AI page. The conversation runs edge to edge behind a see-through header
+ * The AI page. The conversation runs edge to edge behind a see-through header
  * and a floating composer: only their buttons block it, and it fades out under both. The list
  * follows new text only while the latest reply is in view and otherwise offers 맨 아래로.
  * AI settings live in 내 정보, and root navigation belongs to the design frame's bottom tabs.
@@ -809,7 +809,7 @@ private fun CombinedAiPlace(
     onDecide: () -> Unit,
     onPreviewRoute: () -> Unit,
 ) {
-    val facts = candidateOptionFacts(card)
+    val facts = optionCardFacts(card)
     Row(
         modifier = Modifier
             .fillMaxWidth()

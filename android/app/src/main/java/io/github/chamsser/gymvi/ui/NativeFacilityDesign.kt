@@ -43,82 +43,21 @@ import io.github.chamsser.gymvi.R
 import io.github.chamsser.gymvi.data.ExerciseContentItem
 import io.github.chamsser.gymvi.data.FacilityMapItem
 
-@Composable
-internal fun NativeFacilityActions(
-    facility: FacilityMapItem,
-    onStart: (FacilityMapItem) -> Unit,
-    onDestination: (FacilityMapItem) -> Unit,
-    onPhone: (FacilityMapItem) -> Unit,
-    onShare: (FacilityMapItem) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val design = LocalNativeDesign.current
-    val actions = design.style.actions
-    Column(modifier.fillMaxWidth().padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        when {
-            actions == NativeActions.SINGLE -> {
-                FacilityActionButton("경로 보기", R.drawable.ic_material_symbol_route_arrow_24, "facility-route-arrive", { onDestination(facility) }, Modifier.fillMaxWidth(), emphasized = true)
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FacilityActionButton("출발", R.drawable.ic_material_symbol_route_arrow_24, "facility-route-start", { onStart(facility) }, Modifier.weight(1f))
-                    FacilityActionButton("전화", R.drawable.ic_material_symbol_call_24, "facility-call", { onPhone(facility) }, Modifier.weight(1f), enabled = facility.phoneNumber != null)
-                    FacilityActionButton("공유", R.drawable.ic_material_symbol_share_24, "facility-share", { onShare(facility) }, Modifier.weight(1f))
-                }
-            }
-            design.variant == NativeDesignVariant.CLAUDE_A -> {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FacilityActionButton("출발", R.drawable.ic_material_symbol_route_arrow_24, "facility-route-start", { onStart(facility) }, Modifier.weight(1f))
-                    FacilityActionButton("도착", R.drawable.ic_material_symbol_location_on_24, "facility-route-arrive", { onDestination(facility) }, Modifier.weight(1f), emphasized = true)
-                }
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                    TextButton(onClick = { onPhone(facility) }, enabled = facility.phoneNumber != null, modifier = Modifier.testTag("facility-call")) {
-                        Icon(painterResource(R.drawable.ic_material_symbol_call_24), null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("전화", color = MaterialTheme.colorScheme.onSurface)
-                    }
-                    Spacer(Modifier.width(24.dp))
-                    TextButton(onClick = { onShare(facility) }, modifier = Modifier.testTag("facility-share")) {
-                        Icon(painterResource(R.drawable.ic_material_symbol_share_24), null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("공유", color = MaterialTheme.colorScheme.onSurface)
-                    }
-                }
-            }
-            else -> Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                FacilityActionButton("출발", R.drawable.ic_material_symbol_route_arrow_24, "facility-route-start", { onStart(facility) }, Modifier.weight(1f), emphasized = actions == NativeActions.DUAL_PRIMARY)
-                FacilityActionButton("도착", R.drawable.ic_material_symbol_location_on_24, "facility-route-arrive", { onDestination(facility) }, Modifier.weight(1f), emphasized = true)
-                NativeUtilityAction("전화", R.drawable.ic_material_symbol_call_24, "facility-call", facility.phoneNumber != null) { onPhone(facility) }
-                NativeUtilityAction("공유", R.drawable.ic_material_symbol_share_24, "facility-share") { onShare(facility) }
-            }
-        }
-    }
-}
-
-@Composable
-private fun NativeUtilityAction(label: String, icon: Int, tag: String, enabled: Boolean = true, onClick: () -> Unit) {
-    Surface(
-        onClick = onClick, enabled = enabled, shape = CircleShape,
-        border = if (LocalNativeDesign.current.style.surface == NativeSurface.FLOATING) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
-        color = MaterialTheme.colorScheme.surface, modifier = Modifier.size(48.dp).testTag(tag),
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Icon(painterResource(icon), label, Modifier.size(20.dp), tint = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline)
-        }
-    }
-}
-
-/** Separates list rows; the combined design uses a finer line than the Material default. */
+/** Separates list rows with a finer line than the Material default. */
 @Composable
 internal fun NativeHairline(modifier: Modifier = Modifier) {
     HorizontalDivider(
         modifier = modifier,
-        thickness = if (LocalNativeDesign.current.variant == NativeDesignVariant.COMBINED) 0.5.dp else DividerDefaults.Thickness,
+        thickness = 0.5.dp,
         color = gymviSubtleBorderColor(),
     )
 }
 
-/** Asks the AI about the selected facility. The combined design keeps Claude A's outlined button. */
+/** Asks the AI about the selected facility with an outlined button. */
 @Composable
 internal fun NativeFacilityAiAction(label: String, onClick: () -> Unit) {
-    val design = LocalNativeDesign.current
-    val combined = design.variant == NativeDesignVariant.COMBINED
-    val outlined = combined || design.style.surface != NativeSurface.TONAL
-    val cornerDp = if (combined) claudeNativeStyle(NativeDesignVariant.CLAUDE_A).cornerDp else design.style.cornerDp
+    val outlined = true
+    val cornerDp = 12
     Spacer(Modifier.height(12.dp))
     Surface(
         onClick = onClick,
@@ -151,7 +90,7 @@ private data class FacilityInformationItem(
 )
 
 /**
- * Rows the combined design keeps open, at most three in their usual order: what people check before
+ * Rows kept open, at most three in their usual order: what people check before
  * going (hours and phone) first, then the next known rows. The rest stay in the same block behind the toggle.
  */
 internal fun combinedFacilityInformationKeyKinds(kinds: List<FacilityInformationKind>): List<FacilityInformationKind> {
@@ -176,19 +115,8 @@ internal fun NativeFacilityInformationSection(facility: FacilityMapItem) {
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.Bold,
         )
-        Spacer(Modifier.height(if (design.variant == NativeDesignVariant.COMBINED) 10.dp else 6.dp))
-        when (design.variant) {
-            NativeDesignVariant.COMBINED -> CombinedFacilityInformation(facility.facilityId, items, design.reduceMotion)
-            NativeDesignVariant.GPT_B -> TiledFacilityInformation(items)
-            NativeDesignVariant.GPT_C -> FoldedFacilityInformation(facility.facilityId, items)
-            else -> {
-                val stackLabels = facilityInformationLabelsStack(items, roomy = false)
-                items.forEachIndexed { index, item ->
-                    FacilityInformationLine(item, stackLabels)
-                    if (index != items.lastIndex) NativeHairline()
-                }
-            }
-        }
+        Spacer(Modifier.height(10.dp))
+        CombinedFacilityInformation(facility.facilityId, items, design.reduceMotion)
     }
 }
 
@@ -289,84 +217,6 @@ private fun FacilityInformationToggle(label: String, expanded: Boolean, onToggle
             modifier = Modifier.size(20.dp).rotate(if (expanded) 180f else 0f),
             tint = MaterialTheme.colorScheme.primary,
         )
-    }
-}
-
-/** GPT C: the rows open inside the same block as the toggle that folds them. */
-@Composable
-private fun FoldedFacilityInformation(facilityId: String, items: List<FacilityInformationItem>) {
-    var expanded by remember(facilityId) { mutableStateOf(false) }
-    Surface(
-        modifier = Modifier.fillMaxWidth().testTag("facility-information-block"),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        shape = RoundedCornerShape(8.dp),
-    ) {
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-                    .clickable(role = Role.Button) { expanded = !expanded }
-                    .padding(horizontal = 12.dp)
-                    .testTag("facility-information-toggle"),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = if (expanded) {
-                        stringResource(R.string.native_facility_information_less)
-                    } else {
-                        stringResource(R.string.native_facility_information_show, items.size)
-                    },
-                    modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Text(if (expanded) "−" else "+")
-            }
-            if (expanded) {
-                val stackLabels = facilityInformationLabelsStack(items, roomy = false)
-                items.forEach { item ->
-                    NativeHairline(Modifier.padding(horizontal = 12.dp))
-                    FacilityInformationLine(item, stackLabels, horizontalPadding = 12.dp)
-                }
-            }
-        }
-    }
-}
-
-/** GPT B: paired tiles share one height, and the description takes the full width. */
-@Composable
-private fun TiledFacilityInformation(items: List<FacilityInformationItem>) {
-    val (wide, paired) = items.partition { it.kind == FacilityInformationKind.DESCRIPTION }
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        paired.chunked(2).forEach { pair ->
-            Row(
-                modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                pair.forEach { item -> FacilityInformationTile(item, Modifier.weight(1f).fillMaxHeight()) }
-                if (pair.size == 1) Spacer(Modifier.weight(1f))
-            }
-        }
-        wide.forEach { item -> FacilityInformationTile(item, Modifier.fillMaxWidth()) }
-    }
-}
-
-@Composable
-private fun FacilityInformationTile(item: FacilityInformationItem, modifier: Modifier) {
-    Surface(
-        modifier = modifier.testTag("facility-information-${item.kind.tag}"),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        shape = RoundedCornerShape(16.dp),
-    ) {
-        Column(Modifier.padding(14.dp)) {
-            Text(item.label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.height(6.dp))
-            Text(item.value, style = MaterialTheme.typography.bodyLarge)
-            item.caption?.let {
-                Spacer(Modifier.height(4.dp))
-                Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
     }
 }
 

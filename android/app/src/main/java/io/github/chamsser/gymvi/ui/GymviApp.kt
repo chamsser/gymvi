@@ -125,6 +125,7 @@ import io.github.chamsser.gymvi.GymviApplication
 import io.github.chamsser.gymvi.R
 import io.github.chamsser.gymvi.data.AddressSearchItem
 import io.github.chamsser.gymvi.data.AiClientActionType
+import io.github.chamsser.gymvi.data.AiLocalProfile
 import io.github.chamsser.gymvi.data.AiPreferences
 import io.github.chamsser.gymvi.data.AiPreferencesStore
 import io.github.chamsser.gymvi.data.AiRequestOrigin
@@ -642,7 +643,7 @@ fun GymviApp(
     var aiInputValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue())
     }
-    var rootMode by rememberSaveable { mutableStateOf(nativeDesign.homeMode) }
+    var rootMode by rememberSaveable { mutableStateOf(RootMode.MAP) }
     val metaVersionClient = remember(BuildConfig.API_BASE_URL) { MetaVersionApiClient(BuildConfig.API_BASE_URL) }
     // Asked again each time MY opens; MY keeps the last answer until the next one replaces all of it,
     // so the AI model and the data sources it shows always come from the same answer.
@@ -1036,7 +1037,7 @@ fun GymviApp(
                 }
             }
             returnToAiConversation -> returnToChatIfNeeded()
-            rootMode != nativeDesign.homeMode -> rootMode = nativeDesign.homeMode
+            rootMode != RootMode.MAP -> rootMode = RootMode.MAP
             uiState.selectedFacilityId != null -> {
                 onFacilitySelectionCleared()
                 sheetCollapseRequestKey += 1
@@ -1066,19 +1067,13 @@ fun GymviApp(
     }
 
     val systemDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
-    val isDarkTheme = if (nativeDesign.isOriginal) systemDarkTheme else when (nativeDesign.theme) {
+    val isDarkTheme = when (nativeDesign.theme) {
         NativeTheme.SYSTEM -> systemDarkTheme
         NativeTheme.LIGHT -> false
         NativeTheme.DARK -> true
     }
     MaterialTheme(
-        colorScheme = if (!nativeDesign.isOriginal) {
-            nativeDesignColors(nativeDesign, isDarkTheme)
-        } else if (isDarkTheme) {
-            GymviDarkColors
-        } else {
-            GymviLightColors
-        },
+        colorScheme = nativeDesignColors(nativeDesign, isDarkTheme),
         typography = nativeDesignTypography(nativeDesign),
     ) {
      Box(modifier = Modifier.fillMaxSize()) {
@@ -1086,7 +1081,6 @@ fun GymviApp(
         design = nativeDesign,
         selectedMode = rootMode,
         onModeSelected = ::selectRootMode,
-        onSearchRequested = { rootMode = RootMode.MAP; isSearchOpen = true },
         showNavigation = !isRouteOpen && !isSearchOpen && openUsageOptionDetail == null &&
             openUsageOptionListFacilityId == null && openUsageOptionCompareIds == null,
       ) {
@@ -1389,8 +1383,8 @@ fun GymviApp(
                     AnimatedVisibility(
                         visible = rootMode == RootMode.AI,
                         modifier = Modifier.fillMaxSize(),
-                        enter = nativePageEnter(nativeDesign, fromLeft = true),
-                        exit = nativePageExit(nativeDesign, toLeft = true),
+                        enter = nativePageEnter(nativeDesign),
+                        exit = nativePageExit(nativeDesign),
                         label = "ai-root-page-transition",
                     ) {
                         val aiPageSettled by remember(transition) {
@@ -1447,8 +1441,8 @@ fun GymviApp(
                     AnimatedVisibility(
                         visible = rootMode == RootMode.MY,
                         modifier = Modifier.fillMaxSize(),
-                        enter = nativePageEnter(nativeDesign, fromLeft = false),
-                        exit = nativePageExit(nativeDesign, toLeft = false),
+                        enter = nativePageEnter(nativeDesign),
+                        exit = nativePageExit(nativeDesign),
                         label = "my-root-page-transition",
                     ) {
                         Surface(
@@ -1612,23 +1606,24 @@ fun GymviApp(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .windowInsetsBottomHeight(WindowInsets.navigationBars)
-                        .background(
-                            if (!nativeDesign.isOriginal) {
-                                MaterialTheme.colorScheme.surface
-                            } else if (isDarkTheme) {
-                                SystemNavigationBarDark
-                            } else {
-                                SystemNavigationBarLight
-                            },
-                        )
+                        .background(MaterialTheme.colorScheme.surface)
                         .testTag("system-navigation-scrim"),
                 )
             }
         }
       }
       if (showOnboarding) {
+        val personalization = LocalAiPersonalizationActions.current
         GymviOnboarding(
           onRequestLocation = onCurrentLocationRequested,
+          profile = personalization?.profile ?: AiLocalProfile(),
+          onProfileSaved = { changed ->
+            if (personalization != null && changed != personalization.profile) personalization.onProfileChanged(changed)
+            // Filling it in here is the request to use it; 내 정보 can turn it off again.
+            if (changed != AiLocalProfile() && !aiPreferences.useBodyInformation) {
+              onAiPreferencesChanged(aiPreferences.copy(useBodyInformation = true))
+            }
+          },
           onFinish = {
             markOnboardingCompleted(context)
             showOnboarding = false
@@ -1757,17 +1752,6 @@ private fun MapModeScreen(
             )
         }
         if (showFloatingControls) {
-            if (routeMapPickTarget == null && LocalNativeDesign.current.isOriginal) {
-                RootModeDock(
-                    selectedMode = selectedMode,
-                    onModeSelected = onModeSelected,
-                    modes = modes,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .offset { IntOffset(0, -sheetPresentation.followedBottomClearance.roundToPx()) }
-                        .then(coveredMapChrome),
-                )
-            }
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -1869,7 +1853,7 @@ private fun MapTopOverlay(
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
-        if (LocalNativeDesign.current.variant != NativeDesignVariant.GPT_C || routeMapPickTarget != null) MapSearchLauncher(
+        MapSearchLauncher(
             query = searchQuery,
             label = searchLabel,
             onClick = onSearchRequested,
@@ -2801,10 +2785,8 @@ internal fun ExerciseContentSection(
     contents: List<ExerciseContentItem>,
     compact: Boolean = false,
 ) {
-    if (LocalNativeDesign.current.variant == NativeDesignVariant.COMBINED) {
-        NativeExerciseGuide(contents, compact)
-        return
-    }
+    NativeExerciseGuide(contents, compact)
+    return
     val context = LocalContext.current
     Spacer(modifier = Modifier.height(if (compact) 18.dp else 22.dp))
     Text(
@@ -3238,8 +3220,8 @@ private fun FacilityDetails(
                     .focusRequester(nameFocusRequester)
                     .focusable(),
                 style = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = if (design.isOriginal) 20.sp else design.style.titleSp.sp,
-                    lineHeight = if (design.isOriginal) 26.sp else (design.style.titleSp + 7).sp,
+                    fontSize = design.style.titleSp.sp,
+                    lineHeight = (design.style.titleSp + 7).sp,
                 ),
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2,
@@ -3518,10 +3500,8 @@ private fun FacilityAiAction(
     onClick: () -> Unit,
 ) {
     val design = LocalNativeDesign.current
-    if (!design.isOriginal) {
-        NativeFacilityAiAction(label, onClick)
-        return
-    }
+    NativeFacilityAiAction(label, onClick)
+    return
     Spacer(modifier = Modifier.height(18.dp))
     val shape = RoundedCornerShape(14.dp)
     Surface(
@@ -3570,10 +3550,8 @@ private fun FacilityAiAction(
 
 @Composable
 private fun FacilityInformationSection(facility: FacilityMapItem) {
-    if (!LocalNativeDesign.current.isOriginal) {
-        NativeFacilityInformationSection(facility)
-        return
-    }
+    NativeFacilityInformationSection(facility)
+    return
     val classification = listOfNotNull(
         facility.facilityClassName,
         facility.facilityTypeName,
@@ -3788,11 +3766,7 @@ private fun NearbyFacilityRow(
 ) {
     val facility = item.facility
     val category = FacilityCategory.fromFacility(facility)
-    val categoryColor = if (LocalNativeDesign.current.variant == NativeDesignVariant.COMBINED) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        Color(category.markerColor)
-    }
+    val categoryColor = MaterialTheme.colorScheme.primary
     Surface(
         onClick = onClick,
         modifier = Modifier
@@ -4269,10 +4243,6 @@ internal fun FacilityPrimaryActions(
     onShare: (FacilityMapItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (!LocalNativeDesign.current.usesOriginalMapChrome) {
-        NativeFacilityActions(facility, onStartRoute, onDestinationRoute, onPhone, onShare, modifier)
-        return
-    }
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -4324,20 +4294,20 @@ internal fun FacilityActionButton(
     val containerColor = when {
         !enabled -> MaterialTheme.colorScheme.surfaceVariant
         emphasized -> MaterialTheme.colorScheme.primary
-        else -> if (design.usesOriginalMapChrome) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant
+        else -> MaterialTheme.colorScheme.primaryContainer
     }
     val contentColor = when {
         !enabled -> MaterialTheme.colorScheme.outline
         emphasized -> MaterialTheme.colorScheme.onPrimary
-        else -> if (design.usesOriginalMapChrome) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.onPrimaryContainer
     }
     Surface(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier
-            .height(if (design.usesOriginalMapChrome) 42.dp else 48.dp)
+            .height(42.dp)
             .testTag(testTag),
-        shape = RoundedCornerShape(if (design.usesOriginalMapChrome) 21.dp else design.style.cornerDp.dp),
+        shape = RoundedCornerShape(21.dp),
         color = containerColor,
         contentColor = contentColor,
     ) {
@@ -4510,8 +4480,6 @@ private fun Context.findActivity(): Activity? {
 
 private const val ExitConfirmationWindowMillis = 2_000L
 private const val SameVenueComparisonRadiusMeters = 150
-private val SystemNavigationBarLight = Color(0xFF66727C)
-private val SystemNavigationBarDark = Color(0xFF273138)
 private val FavoriteStarColor = Color(0xFFF2B705)
 private val FacilityMediaTileMinHeight = 100.dp
 private val FacilityMediaMoreWidth = 128.dp
@@ -4535,38 +4503,3 @@ private val FacilityAiGradient = Brush.verticalGradient(
     ),
 )
 
-private val GymviLightColors = lightColorScheme(
-    primary = Color(0xFF006A94),
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFC6E7FF),
-    onPrimaryContainer = Color(0xFF003548),
-    background = Color(0xFFF8FAFC),
-    onBackground = Color(0xFF17212B),
-    surface = Color(0xFFFFFFFF),
-    onSurface = Color(0xFF17212B),
-    surfaceVariant = Color(0xFFE8EDF2),
-    onSurfaceVariant = Color(0xFF4B5964),
-    outline = Color(0xFF73808B),
-    outlineVariant = Color(0xFFD7DEE4),
-)
-
-private val GymviDarkColors = darkColorScheme(
-    primary = Color(0xFF85CFFF),
-    onPrimary = Color(0xFF00344A),
-    primaryContainer = Color(0xFF004C6A),
-    onPrimaryContainer = Color(0xFFC6E7FF),
-    background = Color(0xFF101418),
-    onBackground = Color(0xFFE1E7EC),
-    surface = Color(0xFF171C20),
-    onSurface = Color(0xFFE1E7EC),
-    surfaceVariant = Color(0xFF273138),
-    onSurfaceVariant = Color(0xFFBEC8CF),
-    outline = Color(0xFF89949C),
-    outlineVariant = Color(0xFF39444B),
-)
-
-@Preview(showBackground = true, widthDp = 393, heightDp = 852)
-@Composable
-private fun GymviAppPreview() {
-    GymviApp()
-}

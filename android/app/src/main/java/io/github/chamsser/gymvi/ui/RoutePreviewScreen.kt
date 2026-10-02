@@ -371,10 +371,10 @@ private fun RoutePlanner(
             .padding(horizontal = 12.dp, vertical = 8.dp)
             .semantics { paneTitle = plannerTitle }
             .testTag("route-planner"),
-        shape = RoundedCornerShape(if (design.usesOriginalMapChrome) 20.dp else design.style.cornerDp.dp),
+        shape = RoundedCornerShape(20.dp),
         color = MaterialTheme.colorScheme.surface,
-        shadowElevation = if (design.usesOriginalMapChrome) 6.dp else if (design.style.surface == NativeSurface.FLOATING) 4.dp else 0.dp,
-        border = if (!design.usesOriginalMapChrome) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
+        shadowElevation = 6.dp,
+        border = null,
     ) {
         Row(
             modifier = Modifier.padding(start = 2.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
@@ -995,10 +995,10 @@ private fun RouteSummary(
             .heightIn(max = maxSheetHeight)
             .onSizeChanged { size -> onHeightChanged(with(density) { size.height.toDp() }) }
             .testTag("route-preview-sheet"),
-        shape = RoundedCornerShape(topStart = if (design.usesOriginalMapChrome) 24.dp else design.style.cornerDp.dp, topEnd = if (design.usesOriginalMapChrome) 24.dp else design.style.cornerDp.dp),
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         color = MaterialTheme.colorScheme.surface,
-        shadowElevation = if (design.usesOriginalMapChrome) 8.dp else if (design.style.surface == NativeSurface.FLOATING) 4.dp else 0.dp,
-        border = if (!design.usesOriginalMapChrome && design.style.surface == NativeSurface.COMPACT) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
+        shadowElevation = 8.dp,
+        border = null,
     ) {
         Column(
             modifier = Modifier

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * Colors of the combined design's own AI and 내 정보 pages. The AI page is a faint grey so its
+ * Colors of the own AI and 내 정보 pages. The AI page is a faint grey so its
  * white buttons and composer stand on it; 내 정보 groups white rows on a deeper grey, as the
  * settings screens the user chose do. Shadows vanish on a dark page, so raised parts are lighter
  * there instead.

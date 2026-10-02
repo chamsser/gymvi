@@ -147,8 +147,9 @@ internal fun AnchoredFacilitySheet(
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val density = LocalDensity.current
         val scope = rememberCoroutineScope()
-        val statusBarPx = if (LocalNativeStatusBarConsumed.current) 0f else WindowInsets.statusBars.getTop(density).toFloat()
-        val navigationBarPx = if (!design.isOriginal && design.style.navigation == NativeNavigation.BOTTOM_TABS) 0f else WindowInsets.navigationBars.getBottom(density).toFloat()
+        val statusBarPx = WindowInsets.statusBars.getTop(density).toFloat()
+        // The bottom tabs already sit above the navigation bar.
+        val navigationBarPx = 0f
         val expandedTopGapPx = statusBarPx
         val expandedHeightPx = (constraints.maxHeight - expandedTopGapPx)
             .coerceAtLeast(with(density) { 360.dp.toPx() })
@@ -157,13 +158,7 @@ internal fun AnchoredFacilitySheet(
         val screenReaderPageOverlapPx = with(density) { FacilitySheetScreenReaderPageOverlap.toPx() }
         val collapsedHeightPx = (handleHeightPx + navigationBarPx)
             .coerceAtMost(expandedHeightPx)
-        val stage1Fraction = when (design.variant) {
-            NativeDesignVariant.GPT_A -> .38f
-            NativeDesignVariant.GPT_C -> .52f
-            NativeDesignVariant.CLAUDE_B, NativeDesignVariant.GPT_B -> .46f
-            NativeDesignVariant.CLAUDE_A, NativeDesignVariant.CLAUDE_C -> .44f
-            else -> .40f
-        }
+        val stage1Fraction = .40f
         val stage1HeightPx = (constraints.maxHeight * stage1Fraction)
             .coerceIn(collapsedHeightPx, expandedHeightPx)
         val anchors = FacilitySheetAnchors(
@@ -386,7 +381,6 @@ internal fun AnchoredFacilitySheet(
         Surface(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(horizontal = if (design.variant == NativeDesignVariant.CLAUDE_B) 10.dp else 0.dp)
                 .fillMaxWidth()
                 .height(with(density) { expandedHeightPx.toDp() })
                 .offset {
@@ -397,12 +391,11 @@ internal fun AnchoredFacilitySheet(
                 }
                 .testTag("facility-sheet-${motion.stage.testTagSuffix}"),
             shape = androidx.compose.foundation.shape.RoundedCornerShape(
-                topStart = if (design.usesOriginalMapChrome) 28.dp else design.style.cornerDp.dp,
-                topEnd = if (design.usesOriginalMapChrome) 28.dp else design.style.cornerDp.dp,
+                topStart = 28.dp,
+                topEnd = 28.dp,
             ),
             color = MaterialTheme.colorScheme.surface,
-            shadowElevation = if (design.usesOriginalMapChrome) 12.dp else if (design.style.surface == NativeSurface.FLOATING) 6.dp else 0.dp,
-            border = if (!design.usesOriginalMapChrome && design.style.surface in listOf(NativeSurface.LINES, NativeSurface.COMPACT)) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
+            shadowElevation = 12.dp,
         ) {
             Column(
                 modifier = Modifier
@@ -434,7 +427,7 @@ internal fun AnchoredFacilitySheet(
                 ) {
                     Box(
                         modifier = Modifier
-                            .width(if (!design.usesOriginalMapChrome && design.style.surface == NativeSurface.COMPACT) 24.dp else 36.dp)
+                            .width(36.dp)
                             .height(4.dp)
                             .clip(androidx.compose.foundation.shape.RoundedCornerShape(2.dp))
                             .background(MaterialTheme.colorScheme.outlineVariant),
@@ -525,7 +518,7 @@ internal fun AnchoredFacilitySheet(
                                 .fillMaxWidth()
                                 .testTag("facility-stage2-action-bar"),
                             color = MaterialTheme.colorScheme.surface,
-                            shadowElevation = if (design.usesOriginalMapChrome) 5.dp else 0.dp,
+                            shadowElevation = 5.dp,
                         ) {
                             Column {
                                 HorizontalDivider(
@@ -651,10 +644,10 @@ private class FacilitySheetMotion(
                 initialValue = initialOffset,
                 targetValue = targetOffset,
                 initialVelocity = initialVelocityPxPerSecond,
-                animationSpec = if (design.reduceMotion) tween(0) else if (design.usesOriginalMapChrome || design.variant == NativeDesignVariant.CLAUDE_B) spring(
+                animationSpec = if (design.reduceMotion) tween(0) else spring(
                     dampingRatio = Spring.DampingRatioNoBouncy,
                     stiffness = Spring.StiffnessMediumLow,
-                ) else tween(design.durationMillis),
+                ),
             ) { value, _ ->
                 offsetPx = currentAnchors.coerce(value)
             }

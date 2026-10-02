@@ -224,7 +224,7 @@ internal fun FacilityCategoryBar(
     modifier: Modifier = Modifier,
 ) {
     val design = LocalNativeDesign.current
-    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides if (design.usesOriginalMapChrome) 34.dp else 48.dp) {
+    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides 34.dp) {
         LazyRow(
             modifier = modifier
                 .fillMaxWidth()
@@ -240,19 +240,19 @@ internal fun FacilityCategoryBar(
                 Surface(
                     onClick = { onCategorySearch(category, label) },
                     modifier = Modifier
-                        .height(if (design.usesOriginalMapChrome) 34.dp else 48.dp)
+                        .height(34.dp)
                         .testTag("facility-category-" + category.testTagSuffix)
                         .semantics {
                             role = Role.Button
                         },
-                    shape = RoundedCornerShape(if (design.usesOriginalMapChrome) 17.dp else design.style.cornerDp.dp),
-                    color = if (design.usesOriginalMapChrome) MaterialTheme.colorScheme.surface.copy(alpha = 0.98f) else MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(17.dp),
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
                     contentColor = MaterialTheme.colorScheme.onSurface,
                     border = BorderStroke(
                         width = 1.dp,
                         color = gymviSubtleBorderColor(),
                     ),
-                    shadowElevation = if (design.usesOriginalMapChrome) 3.dp else if (design.style.surface == NativeSurface.FLOATING) 2.dp else 0.dp,
+                    shadowElevation = 3.dp,
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp),
@@ -262,7 +262,7 @@ internal fun FacilityCategoryBar(
                         Icon(
                             painter = painterResource(category.iconRes),
                             contentDescription = null,
-                            tint = if (design.usesOriginalMapChrome || design.style.surface == NativeSurface.FLOATING) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .size(15.dp)
                                 .testTag("facility-category-icon-" + category.testTagSuffix),
@@ -270,7 +270,7 @@ internal fun FacilityCategoryBar(
                         Text(
                             text = label,
                             style = MaterialTheme.typography.labelLarge,
-                            fontWeight = if (design.usesOriginalMapChrome) FontWeight.SemiBold else FontWeight.Medium,
+                            fontWeight = FontWeight.SemiBold,
                         )
                     }
                 }

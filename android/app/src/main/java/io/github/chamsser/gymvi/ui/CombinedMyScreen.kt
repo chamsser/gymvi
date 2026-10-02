@@ -67,9 +67,9 @@ import io.github.chamsser.gymvi.data.PublicDataSource
 import io.github.chamsser.gymvi.data.RecentFacility
 
 /**
- * The combined design's 내 정보, laid out like the settings screens the user chose: white rows
+ * 내 정보, laid out like a settings screen: white rows
  * grouped on a grey page, an outline icon leading each row, the current value under its title and
- * Claude B's blue section labels. Every row shows real state, and the AI settings live here
+ * blue section labels. Every row shows real state, and the AI settings live here
  * instead of behind a button on the AI page. With personalization actions provided, the account
  * card opens the profile and a row under AI 메모리 opens the saved memories
  * (CombinedMyPersonalization.kt). A row under 개인정보 및 권한 opens what the app sends where
@@ -219,8 +219,7 @@ internal fun CombinedMyModeScreen(
                 CombinedMyGroup(label = null, palette = palette, rows = rows)
             }
             preferences?.let { current ->
-                // Four independent settings: each row saves its own value and says what it controls,
-                // the same whether the comparison switch is on or off.
+                // Four independent settings: each row saves its own value and says what it controls.
                 val memoryRow: @Composable (Modifier) -> Unit = { rowModifier ->
                     CombinedMyToggleRow(
                         iconRes = R.drawable.ic_material_symbol_history_24,

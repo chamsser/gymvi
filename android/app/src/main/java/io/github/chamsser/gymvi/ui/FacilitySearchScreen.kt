@@ -81,11 +81,11 @@ internal fun MapSearchLauncher(
     val design = LocalNativeDesign.current
     Surface(
         modifier = modifier.height(SearchBarHeight),
-        shape = if (design.usesOriginalMapChrome) SearchBarShape else RoundedCornerShape(design.style.cornerDp.dp),
-        color = if (design.usesOriginalMapChrome) MaterialTheme.colorScheme.surface.copy(alpha = 0.98f) else MaterialTheme.colorScheme.surface,
+        shape = SearchBarShape,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.98f),
         contentColor = MaterialTheme.colorScheme.onSurface,
-        shadowElevation = if (design.usesOriginalMapChrome) 8.dp else if (design.style.surface == NativeSurface.FLOATING) 5.dp else 1.dp,
-        border = if (!design.usesOriginalMapChrome && design.style.surface != NativeSurface.FLOATING) androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
+        shadowElevation = 8.dp,
+        border = null,
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),

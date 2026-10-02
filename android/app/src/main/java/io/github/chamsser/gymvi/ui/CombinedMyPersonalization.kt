@@ -1,5 +1,9 @@
 package io.github.chamsser.gymvi.ui
 
+import androidx.compose.material3.Surface
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.BoxScope
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -115,11 +119,12 @@ internal fun CombinedMyProfilePage(
     var editing by rememberSaveable { mutableStateOf<AiProfileItem?>(null) }
     var confirmingClear by rememberSaveable { mutableStateOf(false) }
     BackHandler(onBack = onBack)
+    Box(modifier = modifier.fillMaxSize()) {
     CombinedMySubPage(
         title = stringResource(R.string.my_profile_title),
         palette = palette,
         onBack = onBack,
-        modifier = modifier.testTag("my-profile-page"),
+        modifier = Modifier.testTag("my-profile-page"),
     ) {
         Row(
             modifier = Modifier
@@ -261,6 +266,7 @@ internal fun CombinedMyProfilePage(
             onDismiss = { editing = null },
         )
         null -> Unit
+    }
     }
     if (confirmingClear) {
         AlertDialog(
@@ -485,10 +491,11 @@ private fun CombinedMyChoiceOption(
 /**
  * A measurement typed large before its unit. Emptying the field and saving removes it. Its problem
  * shows once a save was tried, then follows each edit; typing a first digit is never met with an error.
+ * The sheet lives in the app window and pads for the keyboard there, so it rises with the keyboard
+ * frame by frame; a modal sheet's own window slid up only after the keyboard had opened.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CombinedMyNumberSheet(
+private fun BoxScope.CombinedMyNumberSheet(
     title: String,
     initial: String,
     unit: String,
@@ -511,13 +518,24 @@ private fun CombinedMyNumberSheet(
     val focus = remember { FocusRequester() }
     val canEdit = LocalAiStorageStatus.current.canEdit
     val submit: () -> Unit = { if (valid) onSave(text) else revealError = true }
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = palette.raised,
-        modifier = Modifier.testTag("my-profile-sheet"),
+    BackHandler(onBack = onDismiss)
+    Box(
+        modifier = Modifier
+            .matchParentSize()
+            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.32f))
+            .pointerInput(onDismiss) { detectTapGestures { onDismiss() } }
+            .testTag("my-profile-sheet-scrim"),
+    )
+    Surface(
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .fillMaxWidth()
+            .imePadding()
+            .testTag("my-profile-sheet"),
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        color = palette.raised,
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, bottom = 16.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp)) {
             CombinedMySheetTitle(title = title, modifier = Modifier.padding(bottom = 20.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 BasicTextField(

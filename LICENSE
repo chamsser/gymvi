@@ -1,0 +1,21 @@
+Copyright (c) 2026 chamsser. All rights reserved.
+
+이 저장소의 소스 코드, 디자인, 문서와 그 밖의 모든 자료(이하 "자료")의 저작권은 저작권자에게 있습니다.
+
+1. 허용 범위
+   2026 국민체육진흥공단(KSPO) 공공데이터 활용 경진대회의 접수, 심사, 검증과 결과 발표에 필요한 범위에서만 자료를 열람하고, 내려받고, 빌드하고, 실행할 수 있습니다.
+
+2. 금지 사항
+   위 허용 범위를 벗어난 복제, 수정, 배포, 2차적 저작물 작성, 상업적 이용과 서비스 운영은 저작권자의 사전 서면 허가 없이 할 수 없습니다.
+
+3. 제3자 자료
+   앱에 포함된 오픈소스 라이브러리와 공공데이터는 각자의 라이선스와 이용 조건을 따릅니다. 오픈소스 고지는 android/app/src/main/assets/open_source_licenses에 있습니다.
+
+4. 보증 없음
+   자료는 있는 그대로 제공되며, 저작권자는 자료 이용으로 생긴 어떤 손해에도 책임지지 않습니다.
+
+허가 문의는 GitHub 저장소(https://github.com/chamsser/gymvi)의 Issues로 해 주세요.
+
+---
+
+English summary: All rights reserved. Viewing, downloading, building and running are permitted only as needed for submission, judging, verification and announcement of the 2026 KSPO Public Data Utilization Contest. Any other copying, modification, distribution, derivative work or commercial use requires the copyright holder's prior written permission. Third-party open source components and public data remain under their own licenses. Provided "as is" without warranty.

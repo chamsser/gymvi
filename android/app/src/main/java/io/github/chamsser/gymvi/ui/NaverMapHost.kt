@@ -86,7 +86,7 @@ fun NaverMapHost(
 ) {
     val context = LocalContext.current
     val renderingActive = LocalMapRenderingActive.current
-    val designAccent = if (LocalNativeDesign.current.isOriginal) null else MaterialTheme.colorScheme.primary.toArgb()
+    val designAccent = MaterialTheme.colorScheme.primary.toArgb()
     val activity = context.findComponentActivity()
     val lifecycle = activity.lifecycle
     val localDensity = LocalDensity.current
