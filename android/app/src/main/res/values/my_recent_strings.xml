@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_recent_facilities_count">%1$d곳</string>
+    <string name="my_recent_facilities_none">없음</string>
+    <string name="my_recent_facilities_clear">모두 지우기</string>
+    <string name="my_recent_facilities_clear_title">최근 본 시설을 모두 지울까요?</string>
+    <string name="my_recent_facilities_clear_body">검색 화면과 맞춤 피드의 최근 본 시설도 함께 비워집니다.</string>
+</resources>

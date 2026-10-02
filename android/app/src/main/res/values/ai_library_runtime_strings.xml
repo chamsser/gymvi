@@ -1,0 +1,19 @@
+<resources>
+    <string name="ai_references_changed">참고 설정이 바뀌어 답변을 멈췄습니다. 질문을 다시 보내 주세요.</string>
+    <string name="ai_storage_loading">저장된 대화와 개인 설정을 불러오고 있어요.</string>
+    <string name="ai_storage_read_failed">저장된 대화와 개인 설정을 읽지 못했어요. 기존 자료를 보호하기 위해 변경을 막았어요.</string>
+    <string name="ai_storage_save_failed">대화와 개인 설정을 저장하지 못했어요. 최근 변경 사항은 앱을 닫으면 사라질 수 있어요.</string>
+    <string name="ai_library_storage_error">대화 저장소를 읽거나 저장하지 못했어요. 기존 기록은 유지됩니다.</string>
+    <string name="ai_suggestion_program">%1$s 프로그램 찾아줘</string>
+    <string name="ai_suggestion_goal">%1$s 운동 추천해줘</string>
+    <string name="ai_suggestion_beginner">초보자가 오늘 시작할 운동 알려줘</string>
+    <string-array name="ai_suggestion_sports">
+        <item>수영</item><item>헬스</item><item>요가와 필라테스</item><item>댄스</item><item>테니스</item>
+        <item>배드민턴</item><item>탁구</item><item>골프</item><item>스쿼시</item><item>스케이트</item>
+        <item>구기 종목</item><item>무술</item><item>클라이밍</item>
+    </string-array>
+    <string-array name="ai_suggestion_goals">
+        <item>기초 체력을 기르는</item><item>근력을 기르는</item><item>유연성을 기르는</item>
+        <item>지구력을 기르는</item><item>꾸준히 이어갈 수 있는</item>
+    </string-array>
+</resources>

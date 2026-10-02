@@ -1,0 +1,9 @@
+[project]
+name = "gymvi-pipeline"
+version = "0.1.0"
+description = "Traceable public-data acquisition and normalization for Gymvi"
+requires-python = ">=3.13,<3.14"
+dependencies = []
+
+[dependency-groups]
+test = []

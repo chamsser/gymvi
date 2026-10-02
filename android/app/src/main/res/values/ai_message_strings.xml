@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ai_user_message_menu">메시지 메뉴 열기</string>
+    <string name="ai_user_message_copy">복사</string>
+    <string name="ai_user_message_select">텍스트 선택</string>
+    <string name="ai_message_copied">메시지를 복사했어요</string>
+</resources>

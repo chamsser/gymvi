@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_skip">건너뛰기</string>
+    <string name="onboarding_next">다음</string>
+    <string name="onboarding_later">나중에 하기</string>
+    <string name="onboarding_allow_location">위치 권한 허용</string>
+    <string name="onboarding_ai_title">AI에게 물어보세요</string>
+    <string name="onboarding_ai_body">\"오늘 저녁 수영할 곳\"처럼 말하면 가까운 공공체육시설과 프로그램을 찾아 드려요.</string>
+    <string name="onboarding_map_title">지도에서 바로 찾기</string>
+    <string name="onboarding_map_body">종목을 고르거나 검색해 서울의 공공체육시설을 지도에서 보고, 길찾기까지 이어 갈 수 있어요.</string>
+    <string name="onboarding_my_title">나에게 맞게</string>
+    <string name="onboarding_my_body">신체 정보와 AI 메모리를 켜면 더 알맞게 추천해요. 이 정보는 이 기기에만 저장돼요.</string>
+    <string name="onboarding_location_title">위치 권한을 허용해 주세요</string>
+    <string name="onboarding_location_body">가까운 시설을 찾고 거리를 보여 줄 때만 위치를 써요. 허용하지 않아도 지도 검색과 AI 대화는 쓸 수 있어요.</string>
+</resources>

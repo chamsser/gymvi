@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="960" android:viewportHeight="960"
+    android:tint="?attr/colorControlNormal">
+    <!-- Google Material Symbols Rounded: music_note. -->
+    <group android:translateY="960">
+        <path android:fillColor="@android:color/white" android:pathData="M287,-167Q240,-214 240,-280T287,-393Q334,-440 400,-440Q423,-440 442.5,-434.5T480,-418V-800Q480,-817 491.5,-828.5T520,-840H680Q697,-840 708.5,-828.5T720,-800V-720Q720,-703 708.5,-691.5T680,-680H560V-280Q560,-214 513,-167T400,-120Q334,-120 287,-167Z" />
+    </group>
+</vector>

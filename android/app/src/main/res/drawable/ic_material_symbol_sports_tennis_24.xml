@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="960" android:viewportHeight="960"
+    android:tint="?attr/colorControlNormal">
+    <!-- Google Material Symbols Rounded: sports_tennis. -->
+    <group android:translateY="960">
+        <path android:fillColor="@android:color/white" android:pathData="M520,-378Q423,-378 378,-367T301,-324L165,-188Q154,-177 137.5,-177T109,-188Q97,-200 97,-216.5T109,-245L244,-380Q275,-411 286.5,-457.5T298,-600Q298,-658 324,-714T398,-818Q489,-909 599,-921T780,-860Q852,-788 840,-678T738,-478Q690,-430 634,-404T520,-378ZM412,-494Q459,-448 539,-460T682,-535Q746,-599 758.5,-678.5T724,-803Q676,-851 598.5,-839T456,-763Q393,-700 379.5,-620.5T412,-494ZM607,-87Q560,-134 560,-200T607,-313Q654,-360 720,-360T833,-313Q880,-266 880,-200T833,-87Q786,-40 720,-40T607,-87ZM776.5,-143.5Q800,-167 800,-200T776.5,-256.5Q753,-280 720,-280T663.5,-256.5Q640,-233 640,-200T663.5,-143.5Q687,-120 720,-120T776.5,-143.5Z" />
+    </group>
+</vector>

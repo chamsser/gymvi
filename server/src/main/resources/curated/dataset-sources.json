@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Provider and license facts checked against one published snapshot each. An entry applies only while the ACTIVE row has the same dataset_kind, dataset_version, source_dataset_id and raw_sha256 (the source response payload hash the publisher stored). After a new publish, check that snapshot and add its entry; until then the version response leaves these facts null. A value nobody has checked stays null.",
+  "entries": [
+    {
+      "dataset_kind": "FACILITY",
+      "dataset_version": "kspo-facilities-20260915T082414224545Z-7f5b45de317c",
+      "source_dataset_id": "data-go-kr-15113986",
+      "raw_sha256": "7f5b45de317cd28a5baec41df418f56cefecf416f2b1686d8442842e01948202",
+      "provider": "서울올림픽기념국민체육진흥공단",
+      "license": {
+        "name": "이용허락범위 제한 없음",
+        "url": null,
+        "attribution": null
+      },
+      "checked_at": "2026-10-02T00:28:46+09:00"
+    },
+    {
+      "dataset_kind": "PROGRAM",
+      "dataset_version": "culture-programs-20260925T185145268835Z-d573c71743dc",
+      "source_dataset_id": "culture-bigdata-c3b8fb69-307d-4ae7-ab42-d0314c89ef47",
+      "raw_sha256": "d573c71743dc7540e4c214ee8927f24cf50b3fd791d746a43df74acfae5ae96a",
+      "provider": "체육종합빅데이터센터",
+      "license": {
+        "name": null,
+        "url": null,
+        "attribution": null
+      },
+      "checked_at": "2026-10-02T00:28:46+09:00"
+    }
+  ]
+}

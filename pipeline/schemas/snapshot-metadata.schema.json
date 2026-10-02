@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gymvi://schemas/snapshot-metadata/1.0.0",
+  "title": "Gymvi raw snapshot metadata",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "snapshot_id",
+    "source",
+    "request",
+    "response",
+    "collector",
+    "status"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "snapshot_id": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "required": [
+        "source_dataset_id",
+        "official_name",
+        "catalog_url",
+        "provider",
+        "acquisition_url",
+        "license",
+        "source_modified_date"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "collected_at",
+        "transport",
+        "parameters",
+        "requested_pages",
+        "api_key_used"
+      ]
+    },
+    "response": {
+      "type": "object",
+      "required": [
+        "http_status",
+        "byte_count",
+        "sha256",
+        "row_count",
+        "reported_total_count",
+        "missing_pages"
+      ],
+      "properties": {
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "row_count": { "type": "integer", "minimum": 0 },
+        "missing_pages": { "type": "array", "items": { "type": "integer" } }
+      }
+    },
+    "collector": {
+      "type": "object",
+      "required": ["name", "version", "normalization_schema_version"]
+    },
+    "status": { "enum": ["SUCCESS", "PARTIAL", "FAILED"] }
+  }
+}

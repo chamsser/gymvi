@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ai_video_sample_badge">예시</string>
+    <string name="ai_video_open">영상 열기</string>
+    <string name="ai_video_views">조회수 %1$s회</string>
+    <string name="ai_video_likes">좋아요 %1$s개</string>
+</resources>

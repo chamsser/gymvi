@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ai_prompt_too_long">%1$s자까지 보낼 수 있어요. 지금 %2$s자예요.</string>
+</resources>

@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Class times copied from operator program pages for specific usage options. They supplement a blank program-dataset time only for the stated period; they say nothing about current operation, application availability or remaining seats.",
+  "entries": [
+    {
+      "usage_option_id": "kspo-program:11c0668aabfc5f92ce547172",
+      "facility_id": "spoinfo:A69CF0354238A22E6B2C5EA89E3F7D40",
+      "program_name": "직장인수영A(화목-자유수영)/토요없음_초급만",
+      "operator_program_name": "직장인수영A",
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-10-31",
+      "start_time": "19:00",
+      "end_time": "19:50",
+      "days": "월~금 (월수금 강습, 화목 자유수영)",
+      "sources": [
+        {"name": "양천구시설관리공단 목동문화체육센터 프로그램안내", "url": "https://www.ycs.or.kr/fmcs/27"}
+      ],
+      "checked_at": "2026-09-27T11:00:50+09:00"
+    },
+    {
+      "usage_option_id": "kspo-program:979abae1d4b6dc8ce35e28c5",
+      "facility_id": "spoinfo:A69CF0354238A22E6B2C5EA89E3F7D40",
+      "program_name": "직장인수영B_",
+      "operator_program_name": "직장인수영B",
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-10-31",
+      "start_time": "19:00",
+      "end_time": "19:50",
+      "days": "월수금",
+      "sources": [
+        {"name": "양천구시설관리공단 목동문화체육센터 프로그램안내", "url": "https://www.ycs.or.kr/fmcs/27"}
+      ],
+      "checked_at": "2026-09-27T11:00:50+09:00"
+    },
+    {
+      "usage_option_id": "kspo-program:ef7990fc357ccdd9b55afaed",
+      "facility_id": "spoinfo:A69CF0354238A22E6B2C5EA89E3F7D40",
+      "program_name": "월자유수영D/토요없음",
+      "operator_program_name": "월자유수영D",
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-10-31",
+      "start_time": "19:00",
+      "end_time": "19:50",
+      "days": "화목",
+      "sources": [
+        {"name": "양천구시설관리공단 목동문화체육센터 프로그램안내", "url": "https://www.ycs.or.kr/fmcs/27"}
+      ],
+      "checked_at": "2026-09-27T11:00:50+09:00"
+    },
+    {
+      "usage_option_id": "kspo-program:e0382d75c610e4e2c3fcb16f",
+      "facility_id": "spoinfo:342069ACED387D2E8797908BE7277D7E",
+      "program_name": "저녁요가19",
+      "operator_program_name": "저녁요가19",
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-10-31",
+      "start_time": "19:00",
+      "end_time": "19:50",
+      "days": "화목",
+      "sources": [
+        {"name": "양천구시설관리공단 목동문화체육센터 프로그램안내", "url": "https://www.ycs.or.kr/fmcs/27"}
+      ],
+      "checked_at": "2026-09-27T11:00:50+09:00"
+    },
+    {
+      "usage_option_id": "kspo-program:8b644f162d02a230f59e996b",
+      "facility_id": "spoinfo:342069ACED387D2E8797908BE7277D7E",
+      "program_name": "저녁줌바",
+      "operator_program_name": "저녁줌바",
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-10-31",
+      "start_time": "19:00",
+      "end_time": "19:50",
+      "days": "월수금",
+      "sources": [
+        {"name": "양천구시설관리공단 목동문화체육센터 프로그램안내", "url": "https://www.ycs.or.kr/fmcs/27"}
+      ],
+      "checked_at": "2026-09-27T11:00:50+09:00"
+    },
+    {
+      "usage_option_id": "kspo-program:5ae7ad81fc8dccbd16b189e3",
+      "facility_id": "spoinfo:342069ACED387D2E8797908BE7277D7E",
+      "program_name": "저녁라인댄스",
+      "operator_program_name": "저녁라인댄스",
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-10-31",
+      "start_time": "19:00",
+      "end_time": "19:50",
+      "days": "월수금",
+      "sources": [
+        {"name": "양천구시설관리공단 목동문화체육센터 프로그램안내", "url": "https://www.ycs.or.kr/fmcs/27"}
+      ],
+      "checked_at": "2026-09-27T11:00:50+09:00"
+    },
+    {
+      "usage_option_id": "kspo-program:a98f24f0c16cd48029e683b9",
+      "facility_id": "spoinfo:342069ACED387D2E8797908BE7277D7E",
+      "program_name": "애니댄스",
+      "operator_program_name": "애니댄스",
+      "valid_from": "2026-10-01",
+      "valid_to": "2026-10-31",
+      "start_time": "19:00",
+      "end_time": "19:50",
+      "days": "화목",
+      "sources": [
+        {"name": "양천구시설관리공단 목동문화체육센터 프로그램안내", "url": "https://www.ycs.or.kr/fmcs/27"}
+      ],
+      "checked_at": "2026-09-27T11:00:50+09:00"
+    }
+  ]
+}

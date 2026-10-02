@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960"
+    android:tint="?attr/colorControlNormal">
+    <!-- Google Material Symbols Rounded: fitness_center. -->
+    <group android:translateY="960">
+        <path
+            android:fillColor="@android:color/white"
+            android:pathData="M282,-622L168,-508Q157,-497 140.5,-496.5T112,-508Q101,-519 100.5,-535.5T111,-564L140,-594L112,-622Q100,-634 100,-650T112,-678L168,-734L139,-764Q128,-775 128,-791.5T140,-820Q151,-831 167.5,-831.5T196,-821L226,-792L282,-848Q294,-860 310,-860T338,-848L366,-820L396,-849Q407,-860 423.5,-860T452,-848Q463,-837 463,-820T452,-792L338,-678L678,-338L792,-452Q803,-463 819.5,-463.5T848,-452Q859,-441 859.5,-424.5T849,-396L820,-366L848,-338Q860,-326 860,-310T848,-282L792,-226L821,-196Q832,-185 832,-168.5T820,-140Q809,-129 792.5,-128.5T764,-139L734,-168L678,-112Q666,-100 650,-100T622,-112L594,-140L564,-111Q553,-100 536.5,-100T508,-112Q497,-123 497,-140T508,-168L622,-282L282,-622Z" />
+    </group>
+</vector>

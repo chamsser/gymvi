@@ -1,0 +1,10 @@
+<resources>
+    <string name="ai_map_preview_open">지도 펼치기</string>
+    <string name="ai_map_preview_loading">지도를 불러오고 있어요</string>
+    <string name="ai_map_preview_failed">지도를 불러오지 못했어요</string>
+    <string name="ai_map_preview_retry">다시 시도</string>
+    <string name="ai_map_preview_description">%1$s 위치 지도</string>
+    <string name="ai_map_preview_notices">지도 정보</string>
+    <string name="ai_map_preview_legal">법적 고지</string>
+    <string name="ai_map_preview_licenses">오픈소스 라이선스</string>
+</resources>

@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="960" android:viewportHeight="960"
+    android:tint="?attr/colorControlNormal">
+    <!-- Google Material Symbols Rounded: golf_course. -->
+    <group android:translateY="960">
+        <path android:fillColor="@android:color/white" android:pathData="M780,-120Q755,-120 737.5,-137.5T720,-180Q720,-205 737.5,-222.5T780,-240Q805,-240 822.5,-222.5T840,-180Q840,-155 822.5,-137.5T780,-120ZM400,-80Q300,-80 230,-103.5T160,-160Q160,-183 193,-201T280,-230V-200Q280,-183 291.5,-171.5T320,-160Q337,-160 348.5,-171.5T360,-200V-816Q360,-839 379,-850.5T418,-852L608,-759Q631,-748 631,-723T609,-687L440,-600V-238Q526,-233 583,-211.5T640,-160Q640,-127 570,-103.5T400,-80Z" />
+    </group>
+</vector>

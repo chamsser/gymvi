@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: gymvi-server
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+      - org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+server:
+  error:
+    include-message: never
+
+gymvi:
+  app-version: 0.3.9-dev
+  api-version: v1
+  schema-version: 1
+  rate-limit:
+    requests-per-minute: ${GYMVI_RATE_LIMIT_REQUESTS_PER_MINUTE:120}
+    burst-capacity: ${GYMVI_RATE_LIMIT_BURST_CAPACITY:20}
+    max-tracked-clients: ${GYMVI_RATE_LIMIT_MAX_TRACKED_CLIENTS:4096}
+  route:
+    requests-per-minute: ${GYMVI_ROUTE_REQUESTS_PER_MINUTE:6}
+    burst-capacity: ${GYMVI_ROUTE_BURST_CAPACITY:3}
+    daily-provider-call-limit: ${GYMVI_ROUTE_DAILY_PROVIDER_CALL_LIMIT:100}
+    naver:
+      client-id: ${GYMVI_NAVER_MAPS_CLIENT_ID:}
+      client-secret: ${GYMVI_NAVER_MAPS_CLIENT_SECRET:}
+      endpoint: ${GYMVI_NAVER_DIRECTIONS_ENDPOINT:https://maps.apigw.ntruss.com/map-direction/v1/driving}
+  geocoding:
+    requests-per-minute: ${GYMVI_GEOCODING_REQUESTS_PER_MINUTE:10}
+    burst-capacity: ${GYMVI_GEOCODING_BURST_CAPACITY:3}
+    daily-provider-call-limit: ${GYMVI_GEOCODING_DAILY_PROVIDER_CALL_LIMIT:50000}
+    naver:
+      client-id: ${GYMVI_NAVER_MAPS_CLIENT_ID:}
+      client-secret: ${GYMVI_NAVER_MAPS_CLIENT_SECRET:}
+      endpoint: ${GYMVI_NAVER_GEOCODING_ENDPOINT:https://maps.apigw.ntruss.com/map-geocode/v2/geocode}
+  media:
+    requests-per-minute: ${GYMVI_MEDIA_REQUESTS_PER_MINUTE:12}
+    burst-capacity: ${GYMVI_MEDIA_BURST_CAPACITY:4}
+    daily-provider-call-limit: ${GYMVI_MEDIA_DAILY_PROVIDER_CALL_LIMIT:20000}
+    naver:
+      client-id: ${GYMVI_NAVER_API_HUB_CLIENT_ID:}
+      client-secret: ${GYMVI_NAVER_API_HUB_CLIENT_SECRET:}
+      endpoint: ${GYMVI_NAVER_IMAGE_SEARCH_ENDPOINT:https://naverapihub.apigw.ntruss.com/search/v1/image}
+  weather:
+    enabled: ${GYMVI_WEATHER_ENABLED:true}
+    daily-provider-call-limit: ${GYMVI_WEATHER_DAILY_PROVIDER_CALL_LIMIT:9000}
+    endpoint: ${GYMVI_WEATHER_ENDPOINT:https://api.open-meteo.com/v1/forecast}
+  ai:
+    enabled: ${GYMVI_AI_ENABLED:false}
+    model: ${GYMVI_AI_MODEL:gpt-6-luna}
+    budget:
+      daily-usd: ${GYMVI_AI_DAILY_BUDGET_USD:10}
+      total-usd: ${GYMVI_AI_TOTAL_BUDGET_USD:30}
+      input-usd-per-million-tokens: ${GYMVI_AI_INPUT_USD_PER_MILLION_TOKENS:0.10}
+      output-usd-per-million-tokens: ${GYMVI_AI_OUTPUT_USD_PER_MILLION_TOKENS:0.50}
+      ledger-path: ${GYMVI_AI_BUDGET_LEDGER_PATH:}
+    openai:
+      api-key: ${GYMVI_OPENAI_API_KEY:}
+      endpoint: ${GYMVI_OPENAI_RESPONSES_ENDPOINT:https://api.openai.com/v1/responses}

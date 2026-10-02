@@ -1,0 +1,65 @@
+# IDE and OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Gradle, Android, Kotlin
+.gradle/
+.kotlin/
+**/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.apks
+*.jks
+*.keystore
+keystore.properties
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Secrets and environment
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.key
+secrets/
+
+# Data, databases, logs
+/data/
+/pipeline/data/
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.backup
+logs/
+*.log
+tmp/
+temp/
+
+# Development notes, AI agent and test material kept out of the public repository
+AGENTS.md
+CONTEXT.md
+CLAUDE.md
+.codex/
+.codex-*/
+.claude/
+docs/
+tools/
+scripts/
+**/src/test/
+**/src/androidTest/
+pipeline/tests/

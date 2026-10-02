@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ai_greeting_morning">오늘 오전은 어떤 운동을 해볼까요?</string>
+    <string name="ai_greeting_afternoon">오늘 오후는 어떤 운동을 해볼까요?</string>
+    <string name="ai_greeting_evening">오늘 저녁은 어떤 운동을 해볼까요?</string>
+    <string name="ai_example_fill_action">입력칸에 넣기</string>
+</resources>

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "content_id": "nfa-prescription-9",
+      "title": "수영",
+      "summary": "성인을 위한 수영 운동처방 동영상",
+      "category": "POOL",
+      "sport_tags": ["SWIMMING"],
+      "audience": "성인",
+      "thumbnail_url": "https://img.youtube.com/vi/Q9wCecncxAI/hqdefault.jpg",
+      "content_url": "https://www.youtube.com/watch?v=Q9wCecncxAI",
+      "source_name": "국민체력100",
+      "source_url": "https://nfa.kspo.or.kr/classroom/program/selectPrescriptionMovieList.kspo",
+      "checked_at": "2026-09-27",
+      "usage_terms": null
+    },
+    {
+      "content_id": "nfa-prescription-2",
+      "title": "달리기",
+      "summary": "성인을 위한 심폐지구력 운동처방 동영상",
+      "category": "FIELD",
+      "sport_tags": ["RUNNING"],
+      "audience": "성인",
+      "thumbnail_url": "https://img.youtube.com/vi/fmtLoxbuflw/hqdefault.jpg",
+      "content_url": "https://www.youtube.com/watch?v=fmtLoxbuflw",
+      "source_name": "국민체력100",
+      "source_url": "https://nfa.kspo.or.kr/classroom/program/selectPrescriptionMovieList.kspo",
+      "checked_at": "2026-09-27",
+      "usage_terms": null
+    },
+    {
+      "content_id": "nfa-prescription-137",
+      "title": "전신 루틴 스트레칭",
+      "summary": "맨몸으로 따라 하는 성인 유연성 운동",
+      "category": "GYM",
+      "sport_tags": ["STRETCHING"],
+      "audience": "성인",
+      "thumbnail_url": "https://img.youtube.com/vi/xzCoOyOTgpc/hqdefault.jpg",
+      "content_url": "https://www.youtube.com/watch?v=xzCoOyOTgpc",
+      "source_name": "국민체력100",
+      "source_url": "https://nfa.kspo.or.kr/classroom/program/selectPrescriptionMovieList.kspo",
+      "checked_at": "2026-09-27",
+      "usage_terms": null
+    }
+  ]
+}

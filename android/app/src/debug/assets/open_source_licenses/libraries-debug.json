@@ -1,0 +1,34 @@
+{
+  "libraries": [
+    {
+      "name": "Compose Testing manifest dependency",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-test-manifest:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Tooling",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-tooling-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Tooling Data",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-tooling-data-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    }
+  ]
+}

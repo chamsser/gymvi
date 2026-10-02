@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_privacy_notice">개인정보 이용 안내</string>
+    <string name="my_privacy_summary">Gymvi는 회원가입과 로그인 없이 사용합니다. 이름, 연락처, 이메일 같은 신원 정보는 받지 않고, 아래 정보만 해당 기능을 쓸 때 처리합니다.</string>
+    <string name="my_privacy_section_items">처리하는 정보와 목적</string>
+    <string name="my_privacy_section_services">외부 서비스와 국외 이전</string>
+    <string name="my_privacy_section_retention">보관 기간과 파기</string>
+    <string name="my_privacy_section_rights">이용자의 선택과 권리</string>
+    <string name="my_privacy_effective">시행일 2026년 10월 2일</string>
+
+    <string name="my_privacy_device_title">기기에만 저장하는 정보</string>
+    <string name="my_privacy_notice_device">신체 정보, AI 메모리, 대화 기록, 즐겨찾기와 최근 본 시설은 이 기기에만 저장합니다. 키와 몸무게는 기기 밖으로 보내지 않습니다.</string>
+    <string name="my_privacy_ai_title">AI 질문</string>
+    <string name="my_privacy_notice_ai">질문과 최근 대화를 Gymvi 서버를 거쳐 OpenAI로 보내 답변을 만듭니다.</string>
+    <string name="my_privacy_references_title">맞춤 참고</string>
+    <string name="my_privacy_notice_references">AI 메모리를 켠 경우에만 기억한 운동 조건을 AI 질문과 함께 보내고, 그중 종목은 맞춤 피드 요청에도 보냅니다. 신체 정보 참고를 켠 경우에만 연령대, 운동 경험과 목표를 함께 보냅니다.</string>
+    <string name="my_privacy_location_title">위치</string>
+    <string name="my_privacy_notice_location">AI에게 질문할 때는 위치정보 참고를 켠 경우에만 현재 위치를 약 1km 단위로 줄여 Gymvi 서버에 보냅니다. AI 모델에는 위치 좌표를 보내지 않습니다.</string>
+    <string name="my_privacy_facility_ids_title">시설 추천</string>
+    <string name="my_privacy_notice_facility_ids">맞춤 피드와 AI 추천에는 즐겨찾기 최대 20개와 기기에 보관한 최근 본 시설 최대 12개의 시설 ID를 Gymvi 서버로 보내 추천 순서를 정합니다. 이 목록은 OpenAI 모델에 보내지 않습니다.</string>
+    <string name="my_privacy_map_title">지도와 검색</string>
+    <string name="my_privacy_notice_map">시설 검색, 맞춤 피드와 AI 추천을 위해 지도에 보이는 범위를 Gymvi 서버로 보냅니다.</string>
+
+    <string name="my_privacy_openai_title">OpenAI (미국)</string>
+    <string name="my_privacy_notice_openai">AI 답변을 만들기 위해 질문, 최근 대화와 켜 둔 맞춤 조건을 보냅니다. 위치 좌표와 시설 ID 목록은 보내지 않습니다.</string>
+    <string name="my_privacy_naver_title">NAVER</string>
+    <string name="my_privacy_notice_naver">주소처럼 보이는 검색어와 경로 미리보기의 출발지, 도착지 좌표는 Gymvi 서버를 거쳐 NAVER 주소 검색과 길찾기로 조회합니다. 시설 관련 이미지는 시설 이름과 주소 같은 공개 정보로 NAVER 이미지 검색에서 조회합니다.</string>
+    <string name="my_privacy_weather_title">Open-Meteo</string>
+    <string name="my_privacy_notice_weather">피드의 날씨는 지도 화면 가운데 위치로 조회합니다.</string>
+    <string name="my_privacy_external_map_title">외부 지도 앱</string>
+    <string name="my_privacy_notice_external_map">길찾기를 외부 지도 앱으로 열면 출발지와 도착지를 그 앱에 넘깁니다.</string>
+
+    <string name="my_privacy_server_title">Gymvi 서버</string>
+    <string name="my_privacy_notice_server">대화를 이어 가기 위해 최근 대화와 조건을 마지막 질문 뒤 약 30분까지 보관합니다.</string>
+    <string name="my_privacy_erase_title">이 기기</string>
+    <string name="my_privacy_notice_erase">기기에 저장한 정보는 내 정보에서 직접 지우거나 앱을 삭제하면 함께 지워집니다. 기기 백업으로 다른 기기에 옮기지 않습니다.</string>
+
+    <string name="my_privacy_controls_title">끄기와 지우기</string>
+    <string name="my_privacy_notice_controls">AI 메모리, 신체 정보 참고, 위치정보 참고와 대화 기록 저장은 내 정보에서 언제든 끌 수 있고, 메모리, 대화와 신체 정보는 각각 지울 수 있습니다.</string>
+    <string name="my_privacy_permission_title">위치 권한</string>
+    <string name="my_privacy_notice_permission">위치 권한은 Android 설정에서 언제든 바꿀 수 있습니다. 허용하지 않아도 지도 검색과 AI 대화는 쓸 수 있습니다.</string>
+</resources>

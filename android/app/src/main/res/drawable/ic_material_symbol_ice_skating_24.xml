@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="960" android:viewportHeight="960"
+    android:tint="?attr/colorControlNormal">
+    <!-- Google Material Symbols Rounded: ice_skating. -->
+    <group android:translateY="960">
+        <path android:fillColor="@android:color/white" android:pathData="M120,-80Q103,-80 91.5,-91.5T80,-120Q80,-137 91.5,-148.5T120,-160H240V-240H200Q167,-240 143.5,-263.5T120,-320V-760Q120,-793 143.5,-816.5T200,-840H400Q433,-840 456.5,-816.5T480,-760V-660Q480,-633 496.5,-611T539,-582L644,-553Q695,-539 727.5,-496.5T760,-400V-320Q760,-287 736.5,-263.5T680,-240H640V-160H720Q770,-160 805,-195T840,-280Q840,-297 851.5,-308.5T880,-320Q897,-320 908.5,-308.5T920,-280Q920,-197 861.5,-138.5T720,-80H120ZM200,-320H680V-400Q680,-427 663.5,-447.5T621,-476L516,-506Q480,-517 453,-541.5T412,-600H340Q332,-600 326,-606T320,-620Q320,-628 326,-634T340,-640H404Q402,-652 401.5,-660T400,-680H340Q332,-680 326,-686T320,-700Q320,-708 326,-714T340,-720H400V-760H200V-320ZM320,-160H560V-240H320V-160Z" />
+    </group>
+</vector>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="native_my_back">뒤로</string>
+    <string name="native_my_favorites_count">저장한 시설 %1$d곳</string>
+    <string name="native_my_favorites_empty">저장한 시설 없음</string>
+    <string name="native_my_location_granted">위치 권한 허용됨</string>
+    <string name="native_my_location_denied">위치 권한 허용 안 됨</string>
+    <string name="native_ai_chosen_program">선택한 프로그램</string>
+    <string name="native_ai_choose_program">이 프로그램 선택</string>
+    <string name="native_ai_option_rank">%1$d번 후보</string>
+    <string name="native_ai_clear_selected_facility">선택한 시설 해제</string>
+    <string name="native_facility_information_show">상세 정보 %1$d개 보기</string>
+    <string name="native_facility_information_more">상세 정보 %1$d개 더 보기</string>
+    <string name="native_facility_information_less">상세 정보 접기</string>
+    <string name="native_exercise_guide_more">운동 가이드 %1$d개 더 보기</string>
+    <string name="native_ai_place_map">지도</string>
+    <string name="native_ai_place_route">경로</string>
+    <string name="native_ai_place_number">지도 %1$d번</string>
+    <string name="native_ai_copy_answer">답변 복사</string>
+    <string name="native_ai_share_answer">답변 공유</string>
+    <string name="native_ai_answer_copied">답변을 복사했어요</string>
+    <string name="native_ai_scroll_to_latest">맨 아래로</string>
+    <string name="native_ai_streaming">답변 작성 중</string>
+    <string name="native_my_location_title">위치 권한</string>
+    <string name="native_my_location_precise">정확한 위치 허용</string>
+    <string name="native_my_location_approximate">대략적인 위치 허용</string>
+    <string name="native_my_location_not_allowed">허용 안 됨</string>
+    <string name="native_my_app_version">앱 버전</string>
+</resources>

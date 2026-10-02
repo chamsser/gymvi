@@ -1,0 +1,1226 @@
+{
+  "texts": {
+    "android-sdk-license": {
+      "title": "Android Software Development Kit License",
+      "url": "https://developer.android.com/studio/terms.html"
+    },
+    "apache-2.0": {
+      "title": "Apache License 2.0",
+      "file": "texts/apache-2.0.txt"
+    },
+    "mit-brotli": {
+      "title": "MIT License",
+      "file": "texts/mit-brotli.txt"
+    },
+    "mpl-2.0": {
+      "title": "Mozilla Public License 2.0",
+      "file": "texts/mpl-2.0.txt"
+    },
+    "okhttp-public-suffix-notice": {
+      "title": "NOTICE",
+      "file": "texts/okhttp-public-suffix-notice.txt"
+    },
+    "play-services-androidx-annotation-experimental-library": {
+      "title": "AndroidX annotation experimental library",
+      "file": "texts/play-services/androidx-annotation-experimental-library.txt"
+    },
+    "play-services-androidx-architecture-core-common-library": {
+      "title": "AndroidX architecture core common library",
+      "file": "texts/play-services/androidx-architecture-core-common-library.txt"
+    },
+    "play-services-androidx-architecture-core-runtime-library": {
+      "title": "AndroidX architecture core runtime library",
+      "file": "texts/play-services/androidx-architecture-core-common-library.txt"
+    },
+    "play-services-androidx-lifecycle-common-library": {
+      "title": "AndroidX lifecycle common library",
+      "file": "texts/play-services/androidx-architecture-core-common-library.txt"
+    },
+    "play-services-androidx-lifecycle-livedatacore-library": {
+      "title": "AndroidX lifecycle livedatacore library",
+      "file": "texts/play-services/androidx-architecture-core-common-library.txt"
+    },
+    "play-services-androidx-lifecycle-runtime-library": {
+      "title": "AndroidX lifecycle runtime library",
+      "file": "texts/play-services/androidx-architecture-core-common-library.txt"
+    },
+    "play-services-androidx-tracing-library": {
+      "title": "AndroidX tracing library",
+      "file": "texts/play-services/androidx-architecture-core-common-library.txt"
+    },
+    "play-services-animal-sniffer": {
+      "title": "Animal Sniffer",
+      "file": "texts/play-services/animal-sniffer.txt"
+    },
+    "play-services-apksig": {
+      "title": "apksig",
+      "file": "texts/play-services/apksig.txt"
+    },
+    "play-services-checker-framework-annotations": {
+      "title": "Checker Framework Annotations",
+      "file": "texts/play-services/checker-framework-annotations.txt"
+    },
+    "play-services-error-prone": {
+      "title": "Error Prone",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-google-auto": {
+      "title": "Google Auto",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-guava-jdk5": {
+      "title": "Guava JDK5",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-guava-jdk7": {
+      "title": "Guava JDK7",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-j2objc": {
+      "title": "J2ObjC",
+      "file": "texts/play-services/j2objc.txt"
+    },
+    "play-services-jsinterop-annotations": {
+      "title": "JsInterop Annotations",
+      "file": "texts/play-services/jsinterop-annotations.txt"
+    },
+    "play-services-jspecify": {
+      "title": "JSpecify",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-jsr-250": {
+      "title": "JSR 250",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-jsr-305": {
+      "title": "JSR 305",
+      "file": "texts/play-services/jsr-305.txt"
+    },
+    "play-services-jsr-330": {
+      "title": "JSR 330",
+      "file": "texts/play-services/jsr-330.txt"
+    },
+    "play-services-kotlin": {
+      "title": "Kotlin",
+      "file": "texts/play-services/kotlin.txt"
+    },
+    "play-services-kotlin-2": {
+      "title": "Kotlin",
+      "file": "texts/play-services/kotlin-2.txt"
+    },
+    "play-services-kotlin-coroutines": {
+      "title": "Kotlin coroutines",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-kotlinx-atomicfu": {
+      "title": "kotlinx_atomicfu",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-protocol-buffers-for-java": {
+      "title": "Protocol Buffers for Java",
+      "file": "texts/play-services/protocol-buffers-for-java.txt"
+    },
+    "play-services-safeparcelable-library": {
+      "title": "SafeParcelable library",
+      "file": "texts/play-services/error-prone.txt"
+    },
+    "play-services-tink": {
+      "title": "Tink",
+      "file": "texts/play-services/error-prone.txt"
+    }
+  },
+  "libraries": [
+    {
+      "name": "Accompanist Drawable Painter library",
+      "version": "0.37.3",
+      "artifacts": [
+        "com.google.accompanist:accompanist-drawablepainter:0.37.3"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Activity",
+      "version": "1.13.0",
+      "artifacts": [
+        "androidx.activity:activity:1.13.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Activity Compose",
+      "version": "1.13.0",
+      "artifacts": [
+        "androidx.activity:activity-compose:1.13.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Activity Kotlin Extensions",
+      "version": "1.13.0",
+      "artifacts": [
+        "androidx.activity:activity-ktx:1.13.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Android App Startup Runtime",
+      "version": "1.1.1",
+      "artifacts": [
+        "androidx.startup:startup-runtime:1.1.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Android Arch-Common",
+      "version": "2.2.0",
+      "artifacts": [
+        "androidx.arch.core:core-common:2.2.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Android Arch-Runtime",
+      "version": "2.2.0",
+      "artifacts": [
+        "androidx.arch.core:core-runtime:2.2.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Android Graphics Path",
+      "version": "1.0.1",
+      "artifacts": [
+        "androidx.graphics:graphics-path:1.0.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Android Support Library Interpolators",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.interpolator:interpolator:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Android Support RecyclerView",
+      "version": "1.3.2",
+      "artifacts": [
+        "androidx.recyclerview:recyclerview:1.3.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Android Tracing",
+      "version": "1.2.0",
+      "artifacts": [
+        "androidx.tracing:tracing:1.2.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "AndroidX Autofill",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.autofill:autofill:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "AndroidX Futures",
+      "version": "1.1.0",
+      "artifacts": [
+        "androidx.concurrent:concurrent-futures:1.1.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.core:core-viewtree",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.core:core-viewtree:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.cursoradapter:cursoradapter",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.cursoradapter:cursoradapter:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.customview:customview",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.customview:customview:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.customview:poolingcontainer",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.customview:customview-poolingcontainer:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.drawerlayout:drawerlayout",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.drawerlayout:drawerlayout:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.fragment:fragment",
+      "version": "1.5.4",
+      "artifacts": [
+        "androidx.fragment:fragment:1.5.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.loader:loader",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.loader:loader:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.resourceinspection:resourceinspection-annotation",
+      "version": "1.0.1",
+      "artifacts": [
+        "androidx.resourceinspection:resourceinspection-annotation:1.0.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.swiperefreshlayout:swiperefreshlayout",
+      "version": "1.1.0",
+      "artifacts": [
+        "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.vectordrawable:vectordrawable",
+      "version": "1.1.0",
+      "artifacts": [
+        "androidx.vectordrawable:vectordrawable:1.1.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.vectordrawable:vectordrawable-animated",
+      "version": "1.1.0",
+      "artifacts": [
+        "androidx.vectordrawable:vectordrawable-animated:1.1.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "androidx.viewpager:viewpager",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.viewpager:viewpager:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Annotation",
+      "version": "1.10.0",
+      "artifacts": [
+        "androidx.annotation:annotation-jvm:1.10.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "AppCompat",
+      "version": "1.7.1",
+      "artifacts": [
+        "androidx.appcompat:appcompat:1.7.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "AppCompat Resources",
+      "version": "1.7.1",
+      "artifacts": [
+        "androidx.appcompat:appcompat-resources:1.7.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "coil",
+      "version": "3.6.2",
+      "artifacts": [
+        "io.coil-kt.coil3:coil-android:3.6.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "coil-compose",
+      "version": "3.6.2",
+      "artifacts": [
+        "io.coil-kt.coil3:coil-compose-android:3.6.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "coil-compose-core",
+      "version": "3.6.2",
+      "artifacts": [
+        "io.coil-kt.coil3:coil-compose-core-android:3.6.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "coil-core",
+      "version": "3.6.2",
+      "artifacts": [
+        "io.coil-kt.coil3:coil-core-android:3.6.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "coil-network-core",
+      "version": "3.6.2",
+      "artifacts": [
+        "io.coil-kt.coil3:coil-network-core-android:3.6.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "coil-network-okhttp",
+      "version": "3.6.2",
+      "artifacts": [
+        "io.coil-kt.coil3:coil-network-okhttp-android:3.6.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "collections",
+      "version": "1.5.0",
+      "artifacts": [
+        "androidx.collection:collection-jvm:1.5.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Collections Kotlin Extensions",
+      "version": "1.5.0",
+      "artifacts": [
+        "androidx.collection:collection-ktx:1.5.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Animation",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.animation:animation-android:1.12.0",
+        "org.jetbrains.compose.animation:animation-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Animation Core",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.animation:animation-core-android:1.12.0",
+        "org.jetbrains.compose.animation:animation-core-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Foundation",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.foundation:foundation-android:1.12.0",
+        "org.jetbrains.compose.foundation:foundation-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Geometry",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-geometry-android:1.12.0",
+        "org.jetbrains.compose.ui:ui-geometry-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Graphics",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-graphics-android:1.12.0",
+        "org.jetbrains.compose.ui:ui-graphics-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Layouts",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.foundation:foundation-layout-android:1.12.0",
+        "org.jetbrains.compose.foundation:foundation-layout-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Material Ripple",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.material:material-ripple-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Material3 Components",
+      "version": "1.4.0",
+      "artifacts": [
+        "androidx.compose.material3:material3-android:1.4.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Runtime",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.runtime:runtime-android:1.12.0",
+        "org.jetbrains.compose.runtime:runtime-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Runtime Annotation",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.runtime:runtime-annotation-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Runtime Retain",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.runtime:runtime-retain-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Saveable",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.runtime:runtime-saveable-android:1.12.0",
+        "org.jetbrains.compose.runtime:runtime-saveable-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose UI",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-android:1.12.0",
+        "org.jetbrains.compose.ui:ui-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose UI Preview Tooling",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-tooling-preview-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose UI Text",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-text-android:1.12.0",
+        "org.jetbrains.compose.ui:ui-text-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Unit",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-unit-android:1.12.0",
+        "org.jetbrains.compose.ui:ui-unit-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Compose Util",
+      "version": "1.12.0",
+      "artifacts": [
+        "androidx.compose.ui:ui-util-android:1.12.0",
+        "org.jetbrains.compose.ui:ui-util-android:1.12.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Core",
+      "version": "1.18.0",
+      "artifacts": [
+        "androidx.core:core:1.18.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Core Kotlin Extensions",
+      "version": "1.18.0",
+      "artifacts": [
+        "androidx.core:core-ktx:1.18.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Emoji2",
+      "version": "1.4.0",
+      "artifacts": [
+        "androidx.emoji2:emoji2:1.4.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Emoji2 Views Helper",
+      "version": "1.4.0",
+      "artifacts": [
+        "androidx.emoji2:emoji2-views-helper:1.4.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "ExifInterface",
+      "version": "1.4.2",
+      "artifacts": [
+        "androidx.exifinterface:exifinterface:1.4.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Experimental annotation",
+      "version": "1.4.1",
+      "artifacts": [
+        "androidx.annotation:annotation-experimental:1.4.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Gson",
+      "version": "2.8.6",
+      "artifacts": [
+        "com.google.code.gson:gson:2.8.6"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Guava ListenableFuture only",
+      "version": "1.0",
+      "artifacts": [
+        "com.google.guava:listenablefuture:1.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "JetBrains Java Annotations",
+      "version": "23.0.0",
+      "artifacts": [
+        "org.jetbrains:annotations:23.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "JSpecify annotations",
+      "version": "1.0.0",
+      "artifacts": [
+        "org.jspecify:jspecify:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Kotlin Stdlib",
+      "version": "2.4.10",
+      "artifacts": [
+        "org.jetbrains.kotlin:kotlin-stdlib:2.4.10"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Kotlin Stdlib Jdk7",
+      "version": "1.8.21",
+      "artifacts": [
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Kotlin Stdlib Jdk8",
+      "version": "1.8.21",
+      "artifacts": [
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "kotlinx-coroutines-android",
+      "version": "1.10.2",
+      "artifacts": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "kotlinx-coroutines-core",
+      "version": "1.10.2",
+      "artifacts": [
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "kotlinx-serialization-core",
+      "version": "1.7.3",
+      "artifacts": [
+        "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.3"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle Kotlin Extensions",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-runtime-ktx-android:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle LiveData",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-livedata:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle LiveData Core",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-livedata-core:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle Process",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-process:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle Runtime",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-runtime-android:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle Runtime Compose",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-runtime-compose-android:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle ViewModel",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-viewmodel-android:2.9.4",
+        "androidx.lifecycle:lifecycle-viewmodel:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle ViewModel Kotlin Extensions",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle ViewModel with SavedState",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle-Common",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-common-jvm:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Lifecycle-Common for Java 8",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-common-java8:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "LiveData Core Kotlin Extensions",
+      "version": "2.9.4",
+      "artifacts": [
+        "androidx.lifecycle:lifecycle-livedata-core-ktx:2.9.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "NAVER Map Android SDK",
+      "version": "3.23.3",
+      "artifacts": [
+        "com.naver.maps:map-sdk:3.23.3",
+        "com.naver.maps:geometry:1.3.0"
+      ],
+      "opens": "naver-map-sdk"
+    },
+    {
+      "name": "Navigation Event",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.navigationevent:navigationevent-android:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "NavigationEvent Compose",
+      "version": "1.0.0",
+      "artifacts": [
+        "androidx.navigationevent:navigationevent-compose-android:1.0.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "okhttp",
+      "version": "4.12.0",
+      "artifacts": [
+        "com.squareup.okhttp3:okhttp:4.12.0"
+      ],
+      "texts": [
+        "apache-2.0",
+        "okhttp-public-suffix-notice",
+        "mpl-2.0"
+      ]
+    },
+    {
+      "name": "okhttp-brotli",
+      "version": "4.10.0",
+      "artifacts": [
+        "com.squareup.okhttp3:okhttp-brotli:4.10.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "okio",
+      "version": "3.18.1",
+      "artifacts": [
+        "com.squareup.okio:okio-jvm:3.18.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "org.brotli:dec",
+      "version": "0.1.2",
+      "artifacts": [
+        "org.brotli:dec:0.1.2"
+      ],
+      "texts": [
+        "mit-brotli"
+      ]
+    },
+    {
+      "name": "play-services-base",
+      "version": "18.1.0",
+      "artifacts": [
+        "com.google.android.gms:play-services-base:18.1.0"
+      ],
+      "texts": [
+        "android-sdk-license",
+        "play-services-androidx-annotation-experimental-library",
+        "play-services-androidx-architecture-core-common-library",
+        "play-services-androidx-architecture-core-runtime-library",
+        "play-services-androidx-lifecycle-common-library",
+        "play-services-androidx-lifecycle-livedatacore-library",
+        "play-services-androidx-lifecycle-runtime-library",
+        "play-services-androidx-tracing-library",
+        "play-services-animal-sniffer",
+        "play-services-checker-framework-annotations",
+        "play-services-error-prone",
+        "play-services-guava-jdk5",
+        "play-services-guava-jdk7",
+        "play-services-j2objc",
+        "play-services-jsr-305",
+        "play-services-jspecify",
+        "play-services-jsinterop-annotations",
+        "play-services-kotlin",
+        "play-services-safeparcelable-library",
+        "play-services-apksig"
+      ]
+    },
+    {
+      "name": "play-services-basement",
+      "version": "18.1.0",
+      "artifacts": [
+        "com.google.android.gms:play-services-basement:18.1.0"
+      ],
+      "texts": [
+        "android-sdk-license",
+        "play-services-androidx-annotation-experimental-library",
+        "play-services-androidx-architecture-core-common-library",
+        "play-services-androidx-architecture-core-runtime-library",
+        "play-services-androidx-lifecycle-common-library",
+        "play-services-androidx-lifecycle-livedatacore-library",
+        "play-services-androidx-lifecycle-runtime-library",
+        "play-services-androidx-tracing-library",
+        "play-services-animal-sniffer",
+        "play-services-checker-framework-annotations",
+        "play-services-error-prone",
+        "play-services-guava-jdk5",
+        "play-services-guava-jdk7",
+        "play-services-j2objc",
+        "play-services-jsr-305",
+        "play-services-jspecify",
+        "play-services-jsinterop-annotations",
+        "play-services-kotlin",
+        "play-services-safeparcelable-library",
+        "play-services-apksig"
+      ]
+    },
+    {
+      "name": "play-services-location",
+      "version": "21.0.1",
+      "artifacts": [
+        "com.google.android.gms:play-services-location:21.0.1"
+      ],
+      "texts": [
+        "android-sdk-license",
+        "play-services-androidx-annotation-experimental-library",
+        "play-services-androidx-tracing-library",
+        "play-services-animal-sniffer",
+        "play-services-checker-framework-annotations",
+        "play-services-error-prone",
+        "play-services-google-auto",
+        "play-services-guava-jdk5",
+        "play-services-guava-jdk7",
+        "play-services-j2objc",
+        "play-services-jsr-250",
+        "play-services-jsr-305",
+        "play-services-jsr-330",
+        "play-services-jspecify",
+        "play-services-jsinterop-annotations",
+        "play-services-kotlin-2",
+        "play-services-kotlin-coroutines",
+        "play-services-protocol-buffers-for-java",
+        "play-services-safeparcelable-library",
+        "play-services-tink",
+        "play-services-apksig",
+        "play-services-kotlinx-atomicfu"
+      ]
+    },
+    {
+      "name": "play-services-tasks",
+      "version": "18.0.2",
+      "artifacts": [
+        "com.google.android.gms:play-services-tasks:18.0.2"
+      ],
+      "texts": [
+        "android-sdk-license",
+        "play-services-androidx-annotation-experimental-library",
+        "play-services-androidx-architecture-core-common-library",
+        "play-services-androidx-architecture-core-runtime-library",
+        "play-services-androidx-lifecycle-common-library",
+        "play-services-androidx-lifecycle-livedatacore-library",
+        "play-services-androidx-lifecycle-runtime-library",
+        "play-services-androidx-tracing-library",
+        "play-services-animal-sniffer",
+        "play-services-checker-framework-annotations",
+        "play-services-error-prone",
+        "play-services-guava-jdk5",
+        "play-services-guava-jdk7",
+        "play-services-j2objc",
+        "play-services-jsr-305",
+        "play-services-jspecify",
+        "play-services-jsinterop-annotations",
+        "play-services-kotlin",
+        "play-services-safeparcelable-library",
+        "play-services-apksig"
+      ]
+    },
+    {
+      "name": "Profile Installer",
+      "version": "1.4.1",
+      "artifacts": [
+        "androidx.profileinstaller:profileinstaller:1.4.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "ReLinker",
+      "version": "1.4.4",
+      "artifacts": [
+        "com.getkeepsafe.relinker:relinker:1.4.4"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Saved State",
+      "version": "1.4.0",
+      "artifacts": [
+        "androidx.savedstate:savedstate-android:1.4.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "Saved State Compose",
+      "version": "1.4.0",
+      "artifacts": [
+        "androidx.savedstate:savedstate-compose-android:1.4.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "SavedState Kotlin Extensions",
+      "version": "1.4.0",
+      "artifacts": [
+        "androidx.savedstate:savedstate-ktx:1.4.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "VersionedParcelable",
+      "version": "1.1.1",
+      "artifacts": [
+        "androidx.versionedparcelable:versionedparcelable:1.1.1"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "WindowManager",
+      "version": "1.5.0",
+      "artifacts": [
+        "androidx.window:window:1.5.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    },
+    {
+      "name": "WindowManager Core",
+      "version": "1.5.0",
+      "artifacts": [
+        "androidx.window:window-core-android:1.5.0"
+      ],
+      "texts": [
+        "apache-2.0"
+      ]
+    }
+  ]
+}

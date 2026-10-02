@@ -1,0 +1,1950 @@
+openapi: 3.1.0
+info:
+  title: Gymvi API
+  version: 0.3.9-dev
+  description: Traceable facility discovery, usage-option evidence, bounded related-image lookup, address lookup, and road-route preview contract for Gymvi Android.
+servers:
+  - url: http://127.0.0.1:8080
+    description: Isolated local development server
+paths:
+  /actuator/health:
+    get:
+      operationId: getHealth
+      summary: Read the server process health without exposing dependency details.
+      responses:
+        '200':
+          description: Server process is healthy.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status:
+                    type: string
+                    const: UP
+  /api/v1/meta/version:
+    get:
+      operationId: getVersion
+      summary: Read API, schema, and active dataset versions with their checked sources, and the AI model the server is set up to call.
+      responses:
+        '200':
+          description: Version and dependency summary.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionEnvelope'
+  /api/v1/facilities:
+    get:
+      operationId: searchFacilities
+      summary: Search the active Facility dataset inside a WGS84 bounding box.
+      parameters:
+        - $ref: '#/components/parameters/MinLongitude'
+        - $ref: '#/components/parameters/MinLatitude'
+        - $ref: '#/components/parameters/MaxLongitude'
+        - $ref: '#/components/parameters/MaxLatitude'
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+        - name: query
+          in: query
+          required: false
+          description: Normalized facility-name, registered-industry, or description query.
+          schema:
+            type: string
+            maxLength: 80
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [relevance, distance]
+            default: relevance
+        - name: cursor
+          in: query
+          required: false
+          description: Opaque cursor returned as next_cursor by the preceding page.
+          schema:
+            type: string
+            maxLength: 32
+      responses:
+        '200':
+          description: Deterministically ranked Facility set for the requested map bounds.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityListEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '503':
+          $ref: '#/components/responses/DatasetUnavailable'
+  /api/v1/facilities/{facility_id}:
+    get:
+      operationId: getFacility
+      summary: Read one Facility and its source-record link from the active dataset.
+      parameters:
+        - name: facility_id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 160
+      responses:
+        '200':
+          description: Facility detail and provenance source.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityDetailEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          description: Facility is absent from the active dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          $ref: '#/components/responses/DatasetUnavailable'
+  /api/v1/facilities/{facility_id}/usage-options:
+    get:
+      operationId: getFacilityUsageOptions
+      summary: Read verified program options joined to one Facility.
+      description: Only exact or manually reviewed program joins are returned. Missing program data is reported explicitly and never converted into inferred availability. Safety evidence is not part of this default flow and is reserved for an explicit AI safety question.
+      parameters:
+        - name: facility_id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 160
+      responses:
+        '200':
+          description: Usage options and explicit program-source availability state.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageOptionListEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          description: Facility is absent from the active dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          $ref: '#/components/responses/DatasetUnavailable'
+  /api/v1/evidence/{evidence_id}:
+    get:
+      operationId: getEvidence
+      summary: Read field-level provenance for one active program usage option.
+      parameters:
+        - name: evidence_id
+          in: path
+          required: true
+          description: Program evidence identifier in the form program:<usage_option_id>.
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 200
+            pattern: '^[A-Za-z0-9:_\-.]+$'
+      responses:
+        '200':
+          description: Program facts, source fields, transformations, dataset versions, and license attribution.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvidenceEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          description: The usage option is absent from an active Program version or its Facility version is inactive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          $ref: '#/components/responses/DatasetUnavailable'
+  /api/v1/facilities/{facility_id}/media:
+    get:
+      operationId: getFacilityMedia
+      summary: Read up to four unverified NAVER image-search candidates for one selected Facility.
+      description: The candidates are related search results, not verified official facility photos. Clients must preserve that distinction.
+      parameters:
+        - name: facility_id
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 160
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 4
+            default: 4
+      responses:
+        '200':
+          description: Bounded image candidates and the user-initiated NAVER image-search URL.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacilityMediaEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          description: Facility is absent from the active dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '429':
+          description: This client exceeded the selected-facility media request allowance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '502':
+          description: NAVER image search failed or returned an invalid response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          description: Image search is not configured, the dataset is unavailable, or the daily provider-call budget is exhausted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /api/v1/addresses/search:
+    get:
+      operationId: searchAddresses
+      summary: Convert a bounded road-name or lot-number address query to coordinates through the server-side provider adapter.
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 120
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10
+            default: 5
+      responses:
+        '200':
+          description: Matching road-name and lot-number addresses inside Korea.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeocodingSearchEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          description: This client exceeded the address-search request allowance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '502':
+          description: The geocoding provider failed to return a valid response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          description: Geocoding is not configured or the daily provider-call budget is exhausted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /api/v1/discovery-feed:
+    get:
+      operationId: getDiscoveryFeed
+      summary: Build a deterministic exercise discovery feed for the current map area.
+      description: Nearby public facilities, local context, eligible recommendation items, and official exercise content are assembled by server logic. Program availability is never inferred when its evidence dataset is inactive.
+      parameters:
+        - $ref: '#/components/parameters/MinLongitude'
+        - $ref: '#/components/parameters/MinLatitude'
+        - $ref: '#/components/parameters/MaxLongitude'
+        - $ref: '#/components/parameters/MaxLatitude'
+        - name: local_hour
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 23
+        - name: favorite_facility_id
+          in: query
+          required: false
+          description: Repeated local-only preference signal. At most 50 values are accepted.
+          schema:
+            type: array
+            maxItems: 50
+            items:
+              type: string
+              maxLength: 160
+        - name: preferred_category
+          in: query
+          required: false
+          description: Allowlisted sport preferences from opted-in local memory, never transcript text.
+          schema:
+            type: array
+            maxItems: 13
+            uniqueItems: true
+            items:
+              type: string
+              enum: [SWIMMING, FITNESS, YOGA_PILATES, DANCE, TENNIS, BADMINTON, TABLE_TENNIS, GOLF, SQUASH, SKATING, TEAM_BALL, MARTIAL_ARTS, CLIMBING]
+        - name: recent_facility_id
+          in: query
+          required: false
+          description: Repeated recent-view signal. At most 50 values are accepted.
+          schema:
+            type: array
+            maxItems: 50
+            items:
+              type: string
+              maxLength: 160
+      responses:
+        '200':
+          description: Deterministic discovery feed for the requested map bounds.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryFeedEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '503':
+          $ref: '#/components/responses/DatasetUnavailable'
+  /api/v1/exercise-contents:
+    get:
+      operationId: getExerciseContents
+      summary: List curated exercise content by sport.
+      parameters:
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [SWIMMING, RUNNING, STRETCHING, FITNESS, YOGA_PILATES, DANCE, TENNIS, BADMINTON, TABLE_TENNIS, GOLF, SQUASH, SKATING, TEAM_BALL, MARTIAL_ARTS, CLIMBING]
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 10
+      responses:
+        '200':
+          description: Curated content, possibly empty, with a version for the exact resource bytes.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExerciseContentsEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+  /api/v1/routes/preview:
+    post:
+      operationId: previewRoadRoute
+      summary: Preview one bounded road route inside Korea through the server-side provider adapter.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoutePreviewRequest'
+      responses:
+        '200':
+          description: Provider-backed road path, distance, and duration.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoutePreviewEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          description: This client exceeded the route-specific request allowance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '502':
+          description: The route provider failed to return a valid route.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          description: The route provider is not configured or the daily provider-call budget is exhausted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /api/v1/recommendations:
+    post:
+      operationId: recommendUsageOptions
+      summary: Rank eligible usage options deterministically inside a bounded area.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecommendationRequest'
+      responses:
+        '200':
+          description: Ranked usage options, traceable facts, and exclusion counts.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecommendationEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '503':
+          $ref: '#/components/responses/DatasetUnavailable'
+  /api/v1/ai/turns:
+    post:
+      operationId: createAiTurn
+      summary: Continue a bounded Gymvi exercise-decision conversation.
+      description: The server keeps short transient conversation state, gives the model only derived context and public candidate facts, and never sends exact origin coordinates. Cards and client actions are validated against deterministic server results. Provider failure, rate limiting, or budget blocking returns an explicit fallback in the same response contract.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiTurnRequest'
+      responses:
+        '200':
+          description: One validated AI turn or an explicit deterministic fallback.
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AiTurnEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          description: This client exceeded the shared API request allowance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /api/v1/ai/turns/stream:
+    post:
+      operationId: streamAiTurn
+      summary: Stream a bounded Gymvi exercise-decision conversation.
+      description: |
+        Uses the same request, privacy checks, budget and deterministic tool validation as createAiTurn.
+        Text is received from the upstream provider during generation. Only decoded, content-checked
+        summary sentences are emitted as reply_delta events with JSON data {"delta":"text"}.
+        Tool arguments, reasoning and unvalidated cards or actions are never streamed.
+        The complete event contains the full AiTurnEnvelope and is authoritative: replace any partial
+        reply and apply cards and client actions only then. On an error event, data is ErrorEnvelope;
+        discard the provisional reply. No complete event means the turn did not finish.
+        Provider outages can complete with the existing fallback metadata. Deterministic replies are
+        sent once without artificial pacing. Parse/rate-limit errors before the stream use normal JSON.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiTurnRequest'
+      responses:
+        '200':
+          description: SSE reply_delta events followed by exactly one complete or error event.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              example: |
+                event: reply_delta
+                data: {"delta":"가볍게 걸으며 시작해 보세요."}
+
+                event: complete
+                data: {"data":{"conversation_id":"example","reply":"가볍게 걸으며 시작해 보세요.","action":"EXERCISE_GUIDE","cards":[],"exercise_contents":[],"client_actions":[],"uncertainties":[],"fallback":false,"fallback_reason_code":null},"meta":{"request_id":"example","dataset_version":null,"as_of":null},"warnings":[]}
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          description: This client exceeded the shared API request allowance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+  /api/v1/usage-options/compare:
+    post:
+      operationId: compareUsageOptions
+      summary: Compare two to five active usage options under the same conditions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComparisonRequest'
+      responses:
+        '200':
+          description: Requested options in request order with side-by-side dimensions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComparisonEnvelope'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          description: At least one ID does not belong to the active program dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+        '503':
+          $ref: '#/components/responses/DatasetUnavailable'
+components:
+  headers:
+    RequestId:
+      description: Server-generated UUID that never reuses a caller-provided value.
+      schema:
+        type: string
+        format: uuid
+  parameters:
+    MinLongitude:
+      name: min_longitude
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: -180
+        maximum: 180
+    MinLatitude:
+      name: min_latitude
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: -90
+        maximum: 90
+    MaxLongitude:
+      name: max_longitude
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: -180
+        maximum: 180
+    MaxLatitude:
+      name: max_latitude
+      in: query
+      required: true
+      schema:
+        type: number
+        minimum: -90
+        maximum: 90
+  responses:
+    ValidationError:
+      description: Bounding-box, limit, identifier, or parameter validation failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+    DatasetUnavailable:
+      description: No verified active Facility dataset is queryable; this is not an empty result.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorEnvelope'
+  schemas:
+    ApiMeta:
+      type: object
+      required: [request_id, dataset_version, as_of]
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        dataset_version:
+          type: [string, 'null']
+        as_of:
+          type: [string, 'null']
+          format: date-time
+    ApiWarning:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    VersionData:
+      type: object
+      required: [app_version, api_version, schema_version, dataset_status, dependencies]
+      properties:
+        app_version:
+          type: string
+        api_version:
+          type: string
+        schema_version:
+          type: string
+        dataset_status:
+          type: string
+          enum: [ACTIVE, NOT_CONNECTED]
+        dependencies:
+          type: object
+          additionalProperties:
+            type: string
+        ai_model:
+          $ref: '#/components/schemas/AiModelStatus'
+        datasets:
+          type: array
+          description: ACTIVE published datasets from the same read that fills meta.dataset_version and meta.as_of, FACILITY first. Empty while dataset_status is NOT_CONNECTED. Servers before this field omit it; clients treat a missing field, an empty list, or a failed request as unknown and never keep values from an earlier response.
+          items:
+            $ref: '#/components/schemas/DatasetSource'
+    VersionEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/VersionData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    DatasetSource:
+      type: object
+      description: One ACTIVE published dataset. provider and license come only from a server registry entry checked against this exact publish (same dataset kind, dataset version, source dataset ID, and source payload hash). A new publish, a value nobody checked, or a publish with no entry is null rather than guessed. license is null when none of its values are known.
+      required: [dataset_kind, dataset_version, as_of, provider, license]
+      properties:
+        dataset_kind:
+          type: string
+          enum: [FACILITY, PROGRAM]
+        dataset_version:
+          type: string
+        as_of:
+          type: string
+          format: date-time
+        provider:
+          type: [string, 'null']
+        license:
+          oneOf:
+            - $ref: '#/components/schemas/DatasetLicense'
+            - type: 'null'
+    DatasetLicense:
+      type: object
+      description: name is checked license wording from the registry only and is never taken from publish records. url and attribution come from the registry, or from the values stored at publish when the registry entry matches and they pass the same checks (https with a host and no user info or key-like query names; plain display text). attribution is source-required text shown exactly as given.
+      required: [name, url, attribution]
+      properties:
+        name:
+          type: [string, 'null']
+        url:
+          type: [string, 'null']
+          format: uri
+        attribution:
+          type: [string, 'null']
+    AiModelStatus:
+      type: object
+      description: Server setup read from the AI provider the server actually built. CONFIGURED does not promise remaining budget, a model reply for any turn, or which model produced a reply, and no keys, endpoints, or local paths are included. Servers before this field omit ai_model; clients treat a missing field, NOT_CONFIGURED, or a failed request as an unknown model.
+      required: [provider, configured_model, status]
+      properties:
+        provider:
+          type: [string, 'null']
+          enum: [OPENAI, null]
+        configured_model:
+          type: [string, 'null']
+        status:
+          type: string
+          enum: [CONFIGURED, NOT_CONFIGURED]
+    Coordinate:
+      type: object
+      required: [latitude, longitude]
+      properties:
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+    FacilityType:
+      type: object
+      required: [code, name]
+      properties:
+        code:
+          type: [string, 'null']
+        name:
+          type: [string, 'null']
+    FacilityClass:
+      type: object
+      required: [code, name]
+      properties:
+        code:
+          type: [string, 'null']
+        name:
+          type: [string, 'null']
+    AdministrativeArea:
+      type: object
+      required: [sido, sigungu]
+      properties:
+        sido:
+          type: [string, 'null']
+        sigungu:
+          type: [string, 'null']
+    FactualState:
+      type: object
+      required: [state, reason_code, evidence_id]
+      properties:
+        state:
+          type: string
+          enum: [OPEN, CLOSED, UNKNOWN]
+        reason_code:
+          type: string
+        evidence_id:
+          type: [string, 'null']
+    ProvenanceLink:
+      type: object
+      required: [href, source_record_id]
+      properties:
+        href:
+          type: string
+        source_record_id:
+          type: string
+    FacilitySummary:
+      type: object
+      required: [facility_id, name, facility_type, facility_class, road_address, lot_address, administrative_area, phone, description, gross_floor_area_square_meters, coordinate, facility_operation, provenance]
+      properties:
+        facility_id:
+          type: string
+        name:
+          type: string
+        facility_type:
+          $ref: '#/components/schemas/FacilityType'
+        facility_class:
+          $ref: '#/components/schemas/FacilityClass'
+        road_address:
+          type: [string, 'null']
+        lot_address:
+          type: [string, 'null']
+        administrative_area:
+          $ref: '#/components/schemas/AdministrativeArea'
+        phone:
+          type: [string, 'null']
+        description:
+          type: [string, 'null']
+        gross_floor_area_square_meters:
+          type: [number, 'null']
+          exclusiveMinimum: 0
+          maximum: 10000000
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        facility_operation:
+          $ref: '#/components/schemas/FactualState'
+        operating_hours:
+          $ref: '#/components/schemas/OperatingHours'
+        provenance:
+          $ref: '#/components/schemas/ProvenanceLink'
+    OperatingHours:
+      type: [object, 'null']
+      description: Hours published on an operator page with the time Gymvi checked them. They never change facility_operation and do not mean the facility is open now.
+      required: [schedule, closed_days, note, sources, checked_at]
+      properties:
+        schedule:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [days, hours]
+            properties:
+              days:
+                type: string
+              hours:
+                type: string
+        closed_days:
+          type: array
+          items:
+            type: string
+        note:
+          type: [string, 'null']
+        sources:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required: [name, url]
+            properties:
+              name:
+                type: string
+              url:
+                type: string
+                format: uri
+        checked_at:
+          type: string
+          format: date-time
+    FacilityListData:
+      type: object
+      required: [facilities, total_count, next_cursor]
+      properties:
+        facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilitySummary'
+        total_count:
+          type: integer
+          minimum: 0
+        next_cursor:
+          type: [string, 'null']
+    FacilityListEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/FacilityListData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    FacilitySource:
+      type: object
+      required: [source_dataset_id, source_record_id, catalog_url]
+      properties:
+        source_dataset_id:
+          type: string
+        source_record_id:
+          type: string
+        catalog_url:
+          type: string
+          format: uri
+    FacilityDetail:
+      type: object
+      required: [facility_id, name, facility_type, facility_class, road_address, lot_address, administrative_area, phone, description, gross_floor_area_square_meters, coordinate, facility_operation, source]
+      properties:
+        facility_id:
+          type: string
+        name:
+          type: string
+        facility_type:
+          $ref: '#/components/schemas/FacilityType'
+        facility_class:
+          $ref: '#/components/schemas/FacilityClass'
+        road_address:
+          type: [string, 'null']
+        lot_address:
+          type: [string, 'null']
+        administrative_area:
+          $ref: '#/components/schemas/AdministrativeArea'
+        phone:
+          type: [string, 'null']
+        description:
+          type: [string, 'null']
+        gross_floor_area_square_meters:
+          type: [number, 'null']
+          exclusiveMinimum: 0
+          maximum: 10000000
+        coordinate:
+          $ref: '#/components/schemas/Coordinate'
+        facility_operation:
+          $ref: '#/components/schemas/FactualState'
+        operating_hours:
+          $ref: '#/components/schemas/OperatingHours'
+        source:
+          $ref: '#/components/schemas/FacilitySource'
+    FacilityDetailEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/FacilityDetail'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    FacilityImageCandidate:
+      type: object
+      required: [preview_url, width, height, source, match_state]
+      properties:
+        preview_url:
+          type: string
+          format: uri
+          description: HTTPS preview hosted on a NAVER pstatic.net domain.
+        width:
+          type: [integer, 'null']
+          minimum: 1
+          maximum: 100000
+        height:
+          type: [integer, 'null']
+          minimum: 1
+          maximum: 100000
+        source:
+          type: string
+          const: NAVER_IMAGE_SEARCH
+        match_state:
+          type: string
+          const: SEARCH_CANDIDATE
+          description: The image has not been verified as an official photo of the Facility.
+    FacilityMediaData:
+      type: object
+      required: [facility_id, images, more_images_url]
+      properties:
+        facility_id:
+          type: string
+        images:
+          type: array
+          maxItems: 4
+          items:
+            $ref: '#/components/schemas/FacilityImageCandidate'
+        more_images_url:
+          type: string
+          format: uri
+          description: User-initiated NAVER mobile image-search page for the same bounded query.
+    FacilityMediaEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/FacilityMediaData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    DiscoveryWeather:
+      type: object
+      required: [temperature_celsius, apparent_temperature_celsius, condition, precipitation_millimeters, observed_at, source_name]
+      properties:
+        temperature_celsius:
+          type: number
+        apparent_temperature_celsius:
+          type: [number, 'null']
+        condition:
+          type: string
+          enum: [CLEAR, CLOUDY, RAIN, SNOW, STORM, UNKNOWN]
+        precipitation_millimeters:
+          type: number
+          minimum: 0
+        observed_at:
+          type: string
+          format: date-time
+        source_name:
+          type: string
+          const: Open-Meteo
+    DiscoveryEnvironment:
+      type: object
+      required: [local_hour, day_part, weather]
+      properties:
+        local_hour:
+          type: integer
+          minimum: 0
+          maximum: 23
+        day_part:
+          type: string
+          enum: [MORNING, DAYTIME, EVENING, LATE_NIGHT]
+        weather:
+          oneOf:
+            - $ref: '#/components/schemas/DiscoveryWeather'
+            - type: 'null'
+    ExerciseProposal:
+      type: object
+      required: [proposal_id, title, summary, category, reason_codes]
+      properties:
+        proposal_id:
+          type: string
+        title:
+          type: string
+        summary:
+          type: string
+        category:
+          type: string
+          enum: [POOL, GYM, FIELD, BALL, OTHER]
+        reason_codes:
+          type: array
+          items:
+            type: string
+    UsageOptionsSource:
+      type: object
+      required: [program_dataset_version, program_as_of, attribution]
+      properties:
+        program_dataset_version: {type: string}
+        program_as_of: {type: [string, 'null'], format: date-time}
+        attribution: {type: [string, 'null']}
+    DiscoveryFacility:
+      type: object
+      required: [facility, distance_meters, score, reason_codes]
+      properties:
+        facility:
+          $ref: '#/components/schemas/FacilitySummary'
+        distance_meters:
+          type: integer
+          minimum: 0
+        score:
+          type: integer
+        reason_codes:
+          type: array
+          items:
+            type: string
+    ExerciseContent:
+      type: object
+      required: [content_id, title, summary, category, audience, thumbnail_url, content_url, source_name, source_url]
+      properties:
+        content_id:
+          type: string
+        title:
+          type: string
+        summary:
+          type: string
+        category:
+          type: string
+          enum: [POOL, GYM, FIELD, BALL, OTHER]
+        audience:
+          type: string
+        thumbnail_url:
+          type: string
+          format: uri
+        content_url:
+          type: string
+          format: uri
+        source_name:
+          type: string
+        source_url:
+          type: string
+          format: uri
+    DiscoveryFeedData:
+      type: object
+      required: [area_label, environment, exercise_proposals, usage_options, usage_options_source, usage_options_unavailable_reason_code, facilities, exercise_contents]
+      properties:
+        area_label:
+          type: string
+        environment:
+          $ref: '#/components/schemas/DiscoveryEnvironment'
+        exercise_proposals:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExerciseProposal'
+        usage_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecommendationItem'
+        usage_options_source:
+          oneOf:
+            - $ref: '#/components/schemas/UsageOptionsSource'
+            - type: 'null'
+        usage_options_unavailable_reason_code:
+          type: [string, 'null']
+        facilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscoveryFacility'
+        exercise_contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExerciseContent'
+    DiscoveryFeedEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/DiscoveryFeedData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    EvidenceState:
+      type: object
+      required: [state, reason_code]
+      properties:
+        state:
+          type: string
+        reason_code:
+          type: string
+    UsageOption:
+      type: object
+      required: [usage_option_id, facility_id, program_name, program_type_name, target_name, begin_date, end_date, weekdays, source_time_value, operator_time, recruitment_count, price_won, price_type_name, homepage_url, facility_operation, program_application, join_state, evidence_href]
+      properties:
+        usage_option_id:
+          type: string
+        facility_id:
+          type: string
+        program_name:
+          type: string
+        program_type_name:
+          type: [string, 'null']
+        target_name:
+          type: [string, 'null']
+        begin_date:
+          type: [string, 'null']
+          format: date
+        end_date:
+          type: [string, 'null']
+          format: date
+        weekdays:
+          type: array
+          items:
+            type: string
+        source_time_value:
+          type: [string, 'null']
+        operator_time:
+          oneOf:
+            - $ref: '#/components/schemas/OperatorTime'
+            - type: 'null'
+        recruitment_count:
+          type: [integer, 'null']
+          minimum: 0
+        price_won:
+          type: [integer, 'null']
+          minimum: 0
+          description: Known amount for the billing unit in price_type_name. Null when unknown, including a source 0 without reviewed free evidence; 0 only for a program on the reviewed free list. The source value stays in evidence.
+        price_type_name:
+          type: [string, 'null']
+          description: Source billing-unit text, returned unchanged. Amounts in different or unparsed units are never compared or converted.
+        homepage_url:
+          type: [string, 'null']
+          format: uri
+        facility_operation:
+          $ref: '#/components/schemas/EvidenceState'
+        program_application:
+          $ref: '#/components/schemas/EvidenceState'
+        join_state:
+          type: string
+          enum: [EXACT, REVIEWED]
+        evidence_href:
+          type: string
+    UsageOptionListData:
+      type: object
+      required: [facility_id, program_dataset_version, program_as_of, attribution, usage_options, unavailable_reason_codes]
+      properties:
+        facility_id:
+          type: string
+        program_dataset_version:
+          type: [string, 'null']
+        program_as_of:
+          type: [string, 'null']
+          format: date-time
+        attribution:
+          type: [string, 'null']
+        usage_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageOption'
+        unavailable_reason_codes:
+          type: array
+          items:
+            type: string
+    UsageOptionListEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/UsageOptionListData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    EvidenceSubject:
+      type: object
+      required: [usage_option_id, facility_id, program_name]
+      properties:
+        usage_option_id:
+          type: string
+        facility_id:
+          type: string
+        program_name:
+          type: string
+    EvidenceDataset:
+      type: object
+      required: [dataset_kind, dataset_version, source_dataset_id, schema_version, raw_sha256, as_of, activated_at]
+      properties:
+        dataset_kind:
+          type: string
+          const: PROGRAM
+        dataset_version:
+          type: string
+        source_dataset_id:
+          type: string
+        schema_version:
+          type: string
+        raw_sha256:
+          type: string
+          pattern: '^[0-9a-f]{64}$'
+        as_of:
+          type: string
+          format: date-time
+        activated_at:
+          type: string
+          format: date-time
+    EvidenceSourceRecord:
+      type: object
+      required: [source_record_id, provider_record_id, source_url, catalog_url, as_of]
+      properties:
+        source_record_id:
+          type: string
+        provider_record_id:
+          type: string
+        source_url:
+          type: string
+          format: uri
+        catalog_url:
+          type: string
+          format: uri
+        as_of:
+          type: string
+          format: date-time
+    EvidenceField:
+      type: object
+      required: [field, source_field, source_value, normalized_value, transformation, state, unknown_reason_code]
+      properties:
+        field:
+          type: string
+        source_field:
+          type: string
+        source_value:
+          type: [string, 'null']
+        normalized_value:
+          description: Pipeline-normalized value kept for provenance. It is a confirmed fact only when state is KNOWN; a price_won 0 stays here with state UNKNOWN and ZERO_WITHOUT_FREE_EVIDENCE unless the program is on the reviewed free list.
+          oneOf:
+            - type: string
+            - type: integer
+            - type: array
+              items:
+                type: string
+            - type: 'null'
+        transformation:
+          type: string
+        state:
+          type: string
+          enum: [KNOWN, UNKNOWN]
+        unknown_reason_code:
+          type: [string, 'null']
+    EvidenceStates:
+      type: object
+      required: [facility_operation, program_application]
+      properties:
+        facility_operation:
+          $ref: '#/components/schemas/EvidenceState'
+        program_application:
+          $ref: '#/components/schemas/EvidenceState'
+    FacilityJoinInput:
+      type: object
+      required: [source_field, source_value]
+      properties:
+        source_field:
+          type: string
+          enum: [FCLTY_NM, FCLTY_ADDR, FCLTY_TEL_NO, FCLTY_LA, FCLTY_LO]
+        source_value:
+          type: [string, 'null']
+    EvidenceFacilityJoin:
+      type: object
+      required: [join_state, join_reason_codes, facility_dataset_version, facility_join_inputs]
+      properties:
+        join_state:
+          type: string
+          enum: [EXACT, REVIEWED]
+        join_reason_codes:
+          type: array
+          items:
+            type: string
+        facility_dataset_version:
+          type: string
+        facility_join_inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/FacilityJoinInput'
+    EvidenceLicense:
+      type: object
+      required: [name, url, attribution, commercial_use_allowed, modification_allowed, checked_at]
+      properties:
+        name:
+          type: [string, 'null']
+        url:
+          type: [string, 'null']
+          format: uri
+        attribution:
+          type: [string, 'null']
+        commercial_use_allowed:
+          type: [boolean, 'null']
+        modification_allowed:
+          type: [boolean, 'null']
+        checked_at:
+          type: [string, 'null']
+          format: date-time
+    EvidenceData:
+      type: object
+      required: [evidence_id, evidence_kind, subject, dataset, source_record, fields, operator_time, states, facility_join, limitations, license]
+      properties:
+        evidence_id:
+          type: string
+        evidence_kind:
+          type: string
+          const: PROGRAM
+        subject:
+          $ref: '#/components/schemas/EvidenceSubject'
+        dataset:
+          $ref: '#/components/schemas/EvidenceDataset'
+        source_record:
+          $ref: '#/components/schemas/EvidenceSourceRecord'
+        fields:
+          type: array
+          minItems: 11
+          maxItems: 11
+          items:
+            $ref: '#/components/schemas/EvidenceField'
+        operator_time:
+          oneOf:
+            - $ref: '#/components/schemas/OperatorTime'
+            - type: 'null'
+        states:
+          $ref: '#/components/schemas/EvidenceStates'
+        facility_join:
+          $ref: '#/components/schemas/EvidenceFacilityJoin'
+        limitations:
+          type: array
+          description: PRICE_UNIT_UNKNOWN means price_type_name does not parse to a single count of months (1 to 12) or of sessions (1 to 100), so a positive amount is never compared with or converted to the amounts of other options.
+          items:
+            type: string
+            enum:
+              - RECRUITMENT_COUNT_IS_NOT_REMAINING_CAPACITY
+              - SOURCE_TIME_NOT_INFERRED_FROM_PROGRAM_NAME
+              - OPERATION_AND_APPLICATION_STATES_NEED_CURRENT_EVIDENCE
+              - PRICE_UNIT_UNKNOWN
+        license:
+          $ref: '#/components/schemas/EvidenceLicense'
+    EvidenceEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/EvidenceData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    GeocodedAddress:
+      type: object
+      required: [road_address, jibun_address, coordinate, provider]
+      properties:
+        road_address:
+          type: [string, 'null']
+          maxLength: 300
+        jibun_address:
+          type: [string, 'null']
+          maxLength: 300
+        coordinate:
+          $ref: '#/components/schemas/KoreaRouteCoordinate'
+        provider:
+          type: string
+          enum: [NAVER_GEOCODING]
+    GeocodingSearchData:
+      type: object
+      required: [addresses]
+      properties:
+        addresses:
+          type: array
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/GeocodedAddress'
+    GeocodingSearchEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/GeocodingSearchData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    KoreaRouteCoordinate:
+      type: object
+      required: [latitude, longitude]
+      properties:
+        latitude:
+          type: number
+          minimum: 33
+          maximum: 39.5
+        longitude:
+          type: number
+          minimum: 124
+          maximum: 132
+    RoutePreviewRequest:
+      type: object
+      required: [origin, destination]
+      properties:
+        origin:
+          $ref: '#/components/schemas/KoreaRouteCoordinate'
+        destination:
+          $ref: '#/components/schemas/KoreaRouteCoordinate'
+    RoutePreviewData:
+      type: object
+      required: [distance_meters, duration_seconds, path, provider]
+      properties:
+        distance_meters:
+          type: integer
+          minimum: 0
+        duration_seconds:
+          type: integer
+          minimum: 0
+        path:
+          type: array
+          minItems: 2
+          maxItems: 20000
+          items:
+            $ref: '#/components/schemas/KoreaRouteCoordinate'
+        provider:
+          type: string
+          enum: [NAVER_DIRECTIONS_5]
+    RoutePreviewEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data:
+          $ref: '#/components/schemas/RoutePreviewData'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    ApiError:
+      type: object
+      required: [code, message, retryable]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        retryable:
+          type: boolean
+    ErrorEnvelope:
+      type: object
+      required: [error, meta, warnings]
+      properties:
+        error:
+          $ref: '#/components/schemas/ApiError'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiWarning'
+    RecommendationArea:
+      type: object
+      additionalProperties: false
+      required: [min_longitude, min_latitude, max_longitude, max_latitude]
+      properties:
+        min_longitude: {type: number}
+        min_latitude: {type: number}
+        max_longitude: {type: number}
+        max_latitude: {type: number}
+      description: Each axis may span at most 0.5 degrees.
+    RecommendationOrigin:
+      type: object
+      additionalProperties: false
+      required: [latitude, longitude]
+      properties:
+        latitude: {type: number, minimum: 33, maximum: 39.5}
+        longitude: {type: number, minimum: 124, maximum: 132}
+    ConditionStrength:
+      type: string
+      enum: [REQUIRED, PREFERRED]
+    CategoryCondition:
+      type: object
+      additionalProperties: false
+      required: [values, strength]
+      properties:
+        values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            enum: [SWIMMING, FITNESS, YOGA_PILATES, DANCE, TENNIS, BADMINTON, TABLE_TENNIS, GOLF, SQUASH, SKATING, TEAM_BALL, MARTIAL_ARTS, CLIMBING]
+        strength: {$ref: '#/components/schemas/ConditionStrength'}
+    WeekdayCondition:
+      type: object
+      additionalProperties: false
+      required: [values, strength]
+      properties:
+        values:
+          type: array
+          minItems: 1
+          items: {type: string, enum: [MON, TUE, WED, THU, FRI, SAT, SUN]}
+        strength: {$ref: '#/components/schemas/ConditionStrength'}
+    TargetGroupCondition:
+      type: object
+      additionalProperties: false
+      required: [values, strength]
+      properties:
+        values:
+          type: array
+          minItems: 1
+          items: {type: string, enum: [CHILD, YOUTH, ADULT, SENIOR]}
+        strength: {$ref: '#/components/schemas/ConditionStrength'}
+    TimeCondition:
+      type: object
+      additionalProperties: false
+      required: [earliest, latest, strength]
+      properties:
+        earliest: {type: string, pattern: '^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'}
+        latest: {type: string, pattern: '^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'}
+        strength: {$ref: '#/components/schemas/ConditionStrength'}
+    PriceCondition:
+      type: object
+      additionalProperties: false
+      required: [value, strength]
+      properties:
+        value: {type: integer, minimum: 0, maximum: 10000000}
+        strength: {$ref: '#/components/schemas/ConditionStrength'}
+        unit:
+          type: [string, 'null']
+          enum: [MONTH, SESSION, null]
+          description: Omitted or null compares the known price_won regardless of its billing unit, as before. MONTH or SESSION is met only by a program on the reviewed free list or by an option whose price_type_name parses to exactly one month or exactly one session; any other or unparsed billing unit is MAX_PRICE_WON_UNKNOWN. Amounts are never converted between units, and a continuation omits a null unit.
+    DistanceCondition:
+      type: object
+      additionalProperties: false
+      required: [value, strength]
+      properties:
+        value: {type: integer, minimum: 100, maximum: 100000}
+        strength: {$ref: '#/components/schemas/ConditionStrength'}
+    FlagCondition:
+      type: object
+      additionalProperties: false
+      required: [strength]
+      properties:
+        strength: {$ref: '#/components/schemas/ConditionStrength'}
+    RecommendationConditions:
+      type: object
+      additionalProperties: false
+      properties:
+        categories: {$ref: '#/components/schemas/CategoryCondition'}
+        weekdays: {$ref: '#/components/schemas/WeekdayCondition'}
+        start_time: {$ref: '#/components/schemas/TimeCondition'}
+        max_price_won: {$ref: '#/components/schemas/PriceCondition'}
+        max_distance_meters: {$ref: '#/components/schemas/DistanceCondition'}
+        target_groups: {$ref: '#/components/schemas/TargetGroupCondition'}
+        beginner: {$ref: '#/components/schemas/FlagCondition'}
+        application_available: {$ref: '#/components/schemas/FlagCondition'}
+    RecommendationPreferences:
+      type: object
+      additionalProperties: false
+      properties:
+        favorite_facility_ids: {type: array, maxItems: 20, items: {type: string, maxLength: 160}}
+        recent_facility_ids: {type: array, maxItems: 20, items: {type: string, maxLength: 160}}
+    RecommendationRequest:
+      type: object
+      additionalProperties: false
+      required: [area]
+      properties:
+        area: {$ref: '#/components/schemas/RecommendationArea'}
+        origin: {$ref: '#/components/schemas/RecommendationOrigin'}
+        date: {type: string, format: date}
+        conditions: {$ref: '#/components/schemas/RecommendationConditions'}
+        preferences: {$ref: '#/components/schemas/RecommendationPreferences'}
+        limit: {type: integer, minimum: 1, maximum: 50, default: 20}
+        max_per_facility: {type: integer, minimum: 1, maximum: 10, default: 3}
+    AiTurnContext:
+      type: object
+      additionalProperties: false
+      required: [area]
+      properties:
+        area: {$ref: '#/components/schemas/RecommendationArea'}
+        date: {type: string, format: date}
+        preferences: {$ref: '#/components/schemas/RecommendationPreferences'}
+    AiMemoryFacts:
+      type: object
+      additionalProperties: false
+      required: [categories, weekdays, beginner]
+      properties:
+        categories:
+          type: array
+          uniqueItems: true
+          maxItems: 13
+          items: {type: string, enum: [SWIMMING, FITNESS, YOGA_PILATES, DANCE, TENNIS, BADMINTON, TABLE_TENNIS, GOLF, SQUASH, SKATING, TEAM_BALL, MARTIAL_ARTS, CLIMBING]}
+        weekdays:
+          type: array
+          uniqueItems: true
+          maxItems: 7
+          items: {type: string, enum: [MON, TUE, WED, THU, FRI, SAT, SUN]}
+        earliest_start: {type: [string, 'null'], pattern: '^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'}
+        latest_start: {type: [string, 'null'], pattern: '^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'}
+        max_price_won: {type: [integer, 'null'], minimum: 0, maximum: 10000000}
+        max_distance_meters: {type: [integer, 'null'], minimum: 100, maximum: 100000}
+        beginner: {type: boolean}
+    AiReferences:
+      type: object
+      additionalProperties: false
+      properties:
+        memory: {$ref: '#/components/schemas/AiMemoryFacts'}
+        age_band: {type: string, enum: [YOUTH, ADULT, SENIOR]}
+        experience: {type: string, enum: [BEGINNER, REGULAR, EXPERIENCED]}
+        goal: {type: string, enum: [GENERAL_FITNESS, STRENGTH, FLEXIBILITY, ENDURANCE, WEIGHT_MANAGEMENT]}
+    AiTurnRequest:
+      type: object
+      additionalProperties: false
+      required: [message]
+      properties:
+        conversation_id:
+          type: [string, 'null']
+          minLength: 16
+          maxLength: 80
+          pattern: '^[A-Za-z0-9_-]{16,80}$'
+        message:
+          type: string
+          minLength: 1
+          maxLength: 1000
+        references: {$ref: '#/components/schemas/AiReferences'}
+        continuation:
+          type: string
+          maxLength: 8000
+          description: Strict structured conditions returned by the server, applied only to a new conversation. Never a transcript. Optional reference_matched and reference_values record shared reference values; revoked fields are removed before transport and before model use.
+        origin:
+          allOf:
+            - $ref: '#/components/schemas/RecommendationOrigin'
+          description: Ephemeral approximate origin for deterministic server calculations on this turn. It is never included in model input or retained conversation state.
+        context:
+          oneOf:
+            - $ref: '#/components/schemas/AiTurnContext'
+            - type: 'null'
+          description: Required for a new conversation and omitted on follow-up turns so the original search area remains stable. Start a new conversation to change the area.
+    AiAction:
+      type: string
+      enum: [ASK_CLARIFYING_QUESTION, SHOW_OPTIONS, COMPARE_OPTIONS, EXERCISE_GUIDE, SAFETY_GUIDANCE, FOCUS_MAP, SELECT_DESTINATION, PREVIEW_ROUTE, OUT_OF_SCOPE, MANUAL_FILTERS]
+    AiClientAction:
+      type: object
+      additionalProperties: false
+      required: [type, option_id, facility_id, option_ids]
+      properties:
+        type:
+          type: string
+          enum: [FOCUS_MAP, SELECT_USAGE_OPTION, PREVIEW_ROUTE, OPEN_USAGE_OPTION_COMPARISON, OPEN_MANUAL_FILTERS]
+        option_id: {type: [string, 'null'], maxLength: 160}
+        facility_id: {type: [string, 'null'], maxLength: 160}
+        option_ids:
+          type: array
+          maxItems: 3
+          uniqueItems: true
+          items: {type: string, maxLength: 160}
+    AiTurnData:
+      type: object
+      required: [conversation_id, reply, action, cards, exercise_contents, client_actions, uncertainties, fallback, fallback_reason_code]
+      properties:
+        conversation_id:
+          type: string
+          minLength: 16
+          maxLength: 80
+        reply:
+          type: string
+          maxLength: 500
+        action: {$ref: '#/components/schemas/AiAction'}
+        conversation_title: {type: [string, 'null'], maxLength: 80}
+        continuation: {type: [string, 'null'], maxLength: 8000}
+        memory_facts:
+          description: Newly stated allowlisted facts from this turn, excluding previous conditions and copied reference values. Null for prechecks, provider fallback, and data lookup failure. This is a delta, not a full memory replacement. max_price_won is set only when a successful search on this turn executed a unitless limit equal to the one amount stated in this message; monthly or per-session limits and model-extracted budgets are never learned.
+          oneOf:
+            - $ref: '#/components/schemas/AiMemoryFacts'
+            - type: 'null'
+        cards:
+          type: array
+          maxItems: 5
+          items: {$ref: '#/components/schemas/RecommendationItem'}
+        exercise_contents:
+          type: array
+          maxItems: 2
+          items: {$ref: '#/components/schemas/ExerciseContentItem'}
+        client_actions:
+          type: array
+          maxItems: 2
+          items: {$ref: '#/components/schemas/AiClientAction'}
+        uncertainties:
+          type: array
+          maxItems: 20
+          items: {type: string, maxLength: 160}
+        fallback: {type: boolean}
+        fallback_reason_code: {type: [string, 'null']}
+    AiTurnEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data: {$ref: '#/components/schemas/AiTurnData'}
+        meta: {$ref: '#/components/schemas/ApiMeta'}
+        warnings: {type: array, items: {$ref: '#/components/schemas/ApiWarning'} }
+    ComparisonRequest:
+      type: object
+      additionalProperties: false
+      required: [usage_option_ids]
+      properties:
+        usage_option_ids: {type: array, minItems: 2, maxItems: 5, uniqueItems: true, items: {type: string, maxLength: 160}}
+        origin: {$ref: '#/components/schemas/RecommendationOrigin'}
+        date: {type: string, format: date}
+        conditions: {$ref: '#/components/schemas/RecommendationConditions'}
+    FactBasis:
+      type: object
+      required: [source_field, source_value, matched_terms]
+      properties:
+        source_field: {type: string}
+        source_value: {type: [string, 'null']}
+        matched_terms: {type: array, items: {type: string}}
+    DerivedFact:
+      type: object
+      required: [state, value, values, reason_code, basis]
+      properties:
+        state: {type: string, enum: [KNOWN, UNKNOWN]}
+        value: {}
+        values: {type: [array, 'null'], items: {type: string}}
+        reason_code: {type: [string, 'null']}
+        basis:
+          anyOf:
+            - $ref: '#/components/schemas/FactBasis'
+            - type: 'null'
+    ProgramFacts:
+      type: object
+      required: [category, level, target_groups, start_time, period, straight_line_distance_meters]
+      properties:
+        category: {$ref: '#/components/schemas/DerivedFact'}
+        level: {$ref: '#/components/schemas/DerivedFact'}
+        target_groups: {$ref: '#/components/schemas/DerivedFact'}
+        start_time: {$ref: '#/components/schemas/DerivedFact'}
+        period: {$ref: '#/components/schemas/DerivedFact'}
+        straight_line_distance_meters: {$ref: '#/components/schemas/DerivedFact'}
+    RecommendationOption:
+      allOf:
+        - $ref: '#/components/schemas/UsageOption'
+        - type: object
+          required: [facility_name, facility_type_name, road_address, longitude, latitude]
+          properties:
+            facility_name: {type: string}
+            facility_type_name: {type: [string, 'null']}
+            road_address: {type: [string, 'null']}
+            longitude: {type: number}
+            latitude: {type: number}
+    ScoreComponent:
+      type: object
+      required: [code, points]
+      properties:
+        code: {type: string}
+        points: {type: integer}
+    RecommendationItem:
+      type: object
+      required: [rank, score, score_components, matched_conditions, unmet_preferred_conditions, uncertainty_codes, facts, option]
+      properties:
+        rank: {type: integer, minimum: 1}
+        score: {type: integer}
+        score_components: {type: array, items: {$ref: '#/components/schemas/ScoreComponent'}}
+        matched_conditions: {type: array, items: {type: string}}
+        unmet_preferred_conditions: {type: array, items: {type: string}}
+        uncertainty_codes: {type: array, items: {type: string}}
+        facts: {$ref: '#/components/schemas/ProgramFacts'}
+        option: {$ref: '#/components/schemas/RecommendationOption'}
+    ExcludedOption:
+      type: object
+      required: [usage_option_id, facility_id, reason_codes]
+      properties:
+        usage_option_id: {type: string}
+        facility_id: {type: string}
+        reason_codes: {type: array, items: {type: string}}
+    ExclusionCount:
+      type: object
+      required: [reason_code, count]
+      properties:
+        reason_code: {type: string}
+        count: {type: integer}
+    RecommendationData:
+      type: object
+      required: [date, origin_provided, program_dataset_version, program_as_of, attribution, counts, recommendations, excluded, excluded_truncated, exclusion_summary, unavailable_reason_codes]
+      properties:
+        date: {type: string, format: date}
+        origin_provided: {type: boolean}
+        program_dataset_version: {type: [string, 'null']}
+        program_as_of: {type: [string, 'null'], format: date-time}
+        attribution: {type: [string, 'null']}
+        counts:
+          type: object
+          required: [candidates, eligible, excluded, returned]
+          properties:
+            candidates: {type: integer}
+            eligible: {type: integer}
+            excluded: {type: integer}
+            returned: {type: integer}
+        recommendations: {type: array, items: {$ref: '#/components/schemas/RecommendationItem'}}
+        excluded: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/ExcludedOption'}}
+        excluded_truncated: {type: boolean}
+        exclusion_summary: {type: array, items: {$ref: '#/components/schemas/ExclusionCount'}}
+        unavailable_reason_codes: {type: array, items: {type: string}}
+    RecommendationEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data: {$ref: '#/components/schemas/RecommendationData'}
+        meta: {$ref: '#/components/schemas/ApiMeta'}
+        warnings: {type: array, items: {$ref: '#/components/schemas/ApiWarning'}}
+    ComparisonItem:
+      type: object
+      required: [usage_option_id, eligible, exclusion_reason_codes, score, score_components, matched_conditions, unmet_preferred_conditions, uncertainty_codes, facts, option]
+      properties:
+        usage_option_id: {type: string}
+        eligible: {type: boolean}
+        exclusion_reason_codes: {type: array, items: {type: string}}
+        score: {type: [integer, 'null']}
+        score_components: {type: array, items: {$ref: '#/components/schemas/ScoreComponent'}}
+        matched_conditions: {type: array, items: {type: string}}
+        unmet_preferred_conditions: {type: array, items: {type: string}}
+        uncertainty_codes: {type: array, items: {type: string}}
+        facts: {$ref: '#/components/schemas/ProgramFacts'}
+        option: {$ref: '#/components/schemas/RecommendationOption'}
+    ComparisonDimension:
+      type: object
+      required: [dimension, values, best_usage_option_ids]
+      properties:
+        dimension: {type: string, enum: [PRICE_WON, STRAIGHT_LINE_DISTANCE_METERS, START_TIME, WEEKDAYS, PERIOD, PROGRAM_APPLICATION, TARGET_GROUPS, LEVEL]}
+        values:
+          type: array
+          items:
+            type: object
+            required: [usage_option_id, state, value]
+            properties:
+              usage_option_id: {type: string}
+              state: {type: string, enum: [KNOWN, UNKNOWN]}
+              value: {}
+        best_usage_option_ids: {type: array, items: {type: string}}
+    ComparisonData:
+      type: object
+      required: [date, origin_provided, program_dataset_version, program_as_of, attribution, items, dimensions, unavailable_reason_codes]
+      properties:
+        date: {type: string, format: date}
+        origin_provided: {type: boolean}
+        program_dataset_version: {type: [string, 'null']}
+        program_as_of: {type: [string, 'null'], format: date-time}
+        attribution: {type: [string, 'null']}
+        items: {type: array, items: {$ref: '#/components/schemas/ComparisonItem'}}
+        dimensions: {type: array, items: {$ref: '#/components/schemas/ComparisonDimension'}}
+        unavailable_reason_codes: {type: array, items: {type: string}}
+    ComparisonEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data: {$ref: '#/components/schemas/ComparisonData'}
+        meta: {$ref: '#/components/schemas/ApiMeta'}
+        warnings: {type: array, items: {$ref: '#/components/schemas/ApiWarning'}}
+    ExerciseContentItem:
+      type: object
+      required: [content_id, title, summary, category, sport_tags, audience, thumbnail_url, content_url, source_name, source_url, checked_at, usage_terms]
+      properties:
+        content_id: {type: string}
+        title: {type: string}
+        summary: {type: string}
+        category: {type: string, enum: [POOL, GYM, FIELD, BALL, OTHER]}
+        sport_tags:
+          type: array
+          items: {type: string, enum: [SWIMMING, RUNNING, STRETCHING, FITNESS, YOGA_PILATES, DANCE, TENNIS, BADMINTON, TABLE_TENNIS, GOLF, SQUASH, SKATING, TEAM_BALL, MARTIAL_ARTS, CLIMBING]}
+        audience: {type: string}
+        thumbnail_url: {type: string, format: uri}
+        content_url: {type: string, format: uri}
+        source_name: {type: string}
+        source_url: {type: string, format: uri}
+        checked_at: {type: [string, 'null'], format: date}
+        usage_terms: {type: [string, 'null']}
+    ExerciseContentsData:
+      type: object
+      required: [contents, sport]
+      properties:
+        contents: {type: array, items: {$ref: '#/components/schemas/ExerciseContentItem'}}
+        sport: {type: [string, 'null']}
+    ExerciseContentsMeta:
+      type: object
+      required: [request_id, dataset_version, as_of]
+      properties:
+        request_id: {type: string, format: uuid}
+        dataset_version: {type: string, pattern: '^curated-exercise-contents-[0-9a-f]{12}$'}
+        as_of: {type: 'null'}
+    ExerciseContentsEnvelope:
+      type: object
+      required: [data, meta, warnings]
+      properties:
+        data: {$ref: '#/components/schemas/ExerciseContentsData'}
+        meta: {$ref: '#/components/schemas/ExerciseContentsMeta'}
+        warnings: {type: array, items: {$ref: '#/components/schemas/ApiWarning'}}
+    OperatorTime:
+      type: object
+      required: [start_time, end_time, days, operator_program_name, valid_from, valid_to, sources, checked_at]
+      properties:
+        start_time:
+          type: string
+          pattern: '^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'
+        end_time:
+          type: string
+          pattern: '^(?:[01][0-9]|2[0-3]):[0-5][0-9]$'
+        days:
+          type: [string, 'null']
+        operator_program_name:
+          type: string
+        valid_from:
+          type: string
+          format: date
+        valid_to:
+          type: string
+          format: date
+        sources:
+          type: array
+          items:
+            type: object
+            required: [name, url]
+            properties:
+              name:
+                type: string
+              url:
+                type: string
+                format: uri
+        checked_at:
+          type: string
+          format: date-time

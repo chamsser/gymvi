@@ -1,0 +1,9 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="960" android:viewportHeight="960"
+    android:tint="?attr/colorControlNormal">
+    <!-- Google Material Symbols Rounded: sports_soccer. -->
+    <group android:translateY="960">
+        <path android:fillColor="@android:color/white" android:pathData="M480,-80Q397,-80 324,-111.5T197,-197Q143,-251 111.5,-324T80,-480Q80,-563 111.5,-636T197,-763Q251,-817 324,-848.5T480,-880Q563,-880 636,-848.5T763,-763Q817,-709 848.5,-636T880,-480Q880,-397 848.5,-324T763,-197Q709,-143 636,-111.5T480,-80ZM680,-580L734,-598L750,-652Q718,-700 673,-734.5T574,-786L520,-748V-692L680,-580ZM280,-580L440,-692V-748L386,-786Q332,-769 287,-734.5T210,-652L226,-598L280,-580ZM238,-272L284,-276L314,-330L256,-504L200,-524L160,-494Q160,-429 178,-375.5T238,-272ZM531,-164Q556,-168 580,-176L608,-236L582,-280H378L352,-236L380,-176Q404,-168 429,-164T480,-160Q506,-160 531,-164ZM390,-360H570L626,-520L480,-622L336,-520L390,-360ZM722,-272Q764,-322 782,-375.5T800,-494L760,-522L704,-504L646,-330L676,-276L722,-272Z" />
+    </group>
+</vector>

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gymvi://schemas/normalized-facility/1.0.0",
+  "title": "Gymvi normalized Facility",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "dataset_version",
+    "facility_id",
+    "source_record_id",
+    "source",
+    "name",
+    "administrative_area",
+    "address",
+    "contact",
+    "gross_floor_area_square_meters",
+    "location",
+    "states",
+    "field_provenance",
+    "raw"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "facility_id": { "type": "string", "pattern": "^spoinfo:" },
+    "location": {
+      "type": "object",
+      "required": ["crs", "longitude", "latitude", "source_fields"],
+      "properties": {
+        "crs": { "const": "WGS84" },
+        "longitude": { "type": "number", "minimum": 124, "maximum": 132 },
+        "latitude": { "type": "number", "minimum": 33, "maximum": 39.5 }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "required": ["phone"],
+      "properties": {
+        "phone": {
+          "type": "object",
+          "required": ["value", "source_record_id", "source_field", "as_of", "confidence"],
+          "properties": {
+            "value": { "type": ["string", "null"] },
+            "source_record_id": { "type": "string" },
+            "source_field": { "enum": ["faciTel", "faci_tel_no"] },
+            "as_of": { "type": "string", "format": "date-time" },
+            "confidence": { "const": "SOURCE" }
+          }
+        }
+      }
+    },
+    "gross_floor_area_square_meters": {
+      "type": "object",
+      "required": ["value", "source_record_id", "source_field", "as_of", "confidence"],
+      "properties": {
+        "value": { "type": ["number", "null"], "exclusiveMinimum": 0, "maximum": 10000000 },
+        "source_record_id": { "type": "string" },
+        "source_field": { "enum": ["faciGfa", "faci_gfa"] },
+        "as_of": { "type": "string", "format": "date-time" },
+        "confidence": { "const": "SOURCE" }
+      }
+    },
+    "administrative_area": {
+      "type": "object",
+      "required": ["sido_code", "sigungu_code", "sido_name", "sigungu_name"],
+      "properties": {
+        "sido_code": { "type": ["string", "null"] },
+        "sigungu_code": { "type": ["string", "null"] },
+        "sido_name": { "type": ["string", "null"] },
+        "sigungu_name": { "type": ["string", "null"] }
+      }
+    },
+    "states": {
+      "type": "object",
+      "required": ["facility_operation", "program_application", "safety"]
+    },
+    "raw": { "type": "object" }
+  }
+}
